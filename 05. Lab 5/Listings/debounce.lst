@@ -1,0 +1,171 @@
+C51 COMPILER V9.60.7.0   DEBOUNCE                                                          02/16/2025 23:24:26 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DEBOUNCE
+OBJECT MODULE PLACED IN .\Objects\debounce.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE debounce.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -debounce.lst) TABS(2) OBJECT(.\Objects\debounce.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          // Add other port bits
+   3          sbit LED1 = P1^4;
+   4          sbit LED2 = P1^5;
+   5          sbit LED3 = P1^6;
+   6          sbit LED4 = P1^7;
+   7          sbit sw1 = P1^0;
+   8          sbit sw2 = P1^1;
+   9          sbit sw3 = P1^2;
+  10          sbit sw4 = P1^3;
+  11          // You can write your functions here
+  12          void msdelay(unsigned int time){
+  13   1        int i,j;
+  14   1        for(i=0;i<time;i++){
+  15   2          for(j=0;j<382;j++);
+  16   2        }
+  17   1      }
+  18          void main(){
+  19   1        /*
+  20   1        Add your code here
+  21   1        */
+  22   1        // debounce delay 
+  23   1        unsigned int debounce = 2000;
+  24   1        unsigned int allOn = 1000;
+  25   1        
+  26   1        unsigned int sw1Prev = 0, sw2Prev = 0, sw3Prev = 0, sw4Prev = 0;
+  27   1        while(1){
+  28   2          // to read input
+  29   2          sw1 = 1;
+  30   2          sw2 = 1;
+  31   2          sw3 = 1;
+  32   2          sw4 = 1;
+  33   2          
+  34   2          // S1 OFF to ON
+  35   2          if(sw1 && !sw1Prev){
+  36   3            msdelay(debounce);
+  37   3            if(sw1 == 1){
+  38   4              LED1 = 1;
+  39   4              LED2 = 0;
+  40   4              LED3 = 0;
+  41   4              LED4 = 0;
+  42   4              sw1Prev = 1;
+  43   4            }
+  44   3          }
+  45   2          // S1 ON to OFF
+  46   2          else if(!sw1 && sw1Prev){
+  47   3            msdelay(debounce);
+  48   3            if(sw1 == 0){
+  49   4              LED1 = 1;
+  50   4              LED2 = 1;
+  51   4              LED3 = 1;
+  52   4              LED4 = 1;
+  53   4              msdelay(allOn);
+  54   4              LED1 = 0;
+C51 COMPILER V9.60.7.0   DEBOUNCE                                                          02/16/2025 23:24:26 PAGE 2   
+
+  55   4              LED2 = 0;
+  56   4              LED3 = 0;
+  57   4              LED4 = 0;
+  58   4              sw1Prev = 0;
+  59   4            }
+  60   3          }
+  61   2          // S2 OFF to ON
+  62   2          if(sw2 && !sw2Prev){
+  63   3            msdelay(debounce);
+  64   3            if(sw2 == 1){
+  65   4              LED1 = 0;
+  66   4              LED2 = 1;
+  67   4              LED3 = 0;
+  68   4              LED4 = 0;
+  69   4              sw2Prev = 1;
+  70   4            }
+  71   3          }
+  72   2          // S2 ON to OFF
+  73   2          else if(!sw2 && sw2Prev){
+  74   3            msdelay(debounce);
+  75   3            if(sw2 == 0){
+  76   4              LED1 = 1;
+  77   4              LED2 = 1;
+  78   4              LED3 = 1;
+  79   4              LED4 = 1;
+  80   4              msdelay(allOn);
+  81   4              LED1 = 0;
+  82   4              LED2 = 0;
+  83   4              LED3 = 0;
+  84   4              LED4 = 0;
+  85   4              sw2Prev = 0;
+  86   4            }
+  87   3          }
+  88   2          // S3 OFF to ON
+  89   2          if(sw3 && !sw3Prev){
+  90   3            msdelay(debounce);
+  91   3            if(sw3 == 1){
+  92   4              LED1 = 0;
+  93   4              LED2 = 0;
+  94   4              LED3 = 3;
+  95   4              LED4 = 0;
+  96   4              sw3Prev = 1;
+  97   4            }
+  98   3          }
+  99   2          // S3 ON to OFF
+ 100   2          else if(!sw3 && sw3Prev){
+ 101   3            msdelay(debounce);
+ 102   3            if(sw3 == 0){
+ 103   4              LED1 = 1;
+ 104   4              LED2 = 1;
+ 105   4              LED3 = 1;
+ 106   4              LED4 = 1;
+ 107   4              msdelay(allOn);
+ 108   4              LED1 = 0;
+ 109   4              LED2 = 0;
+ 110   4              LED3 = 0;
+ 111   4              LED4 = 0;
+ 112   4              sw3Prev = 0;
+ 113   4            }
+ 114   3          }
+ 115   2          // S4 OFF to ON
+ 116   2          if(sw4 && !sw4Prev){
+C51 COMPILER V9.60.7.0   DEBOUNCE                                                          02/16/2025 23:24:26 PAGE 3   
+
+ 117   3            msdelay(debounce);
+ 118   3            if(sw4 == 1){
+ 119   4              LED1 = 0;
+ 120   4              LED2 = 0;
+ 121   4              LED3 = 0;
+ 122   4              LED4 = 1;
+ 123   4              sw4Prev = 1;
+ 124   4            }
+ 125   3          }
+ 126   2          // S4 ON to OFF
+ 127   2          else if(!sw4 && sw4Prev){
+ 128   3            msdelay(debounce);
+ 129   3            if(sw4 == 0){
+ 130   4              LED1 = 1;
+ 131   4              LED2 = 1;
+ 132   4              LED3 = 1;
+ 133   4              LED4 = 1;
+ 134   4              msdelay(allOn);
+ 135   4              LED1 = 0;
+ 136   4              LED2 = 0;
+ 137   4              LED3 = 0;
+ 138   4              LED4 = 0;
+ 139   4              sw4Prev = 0;
+ 140   4            }
+ 141   3          }
+ 142   2        }
+ 143   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    374    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

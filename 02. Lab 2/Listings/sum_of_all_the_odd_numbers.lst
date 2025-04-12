@@ -1,0 +1,71 @@
+A51 MACRO ASSEMBLER  SUM_OF_ALL_THE_ODD_NUMBERS                                           01/21/2025 15:05:41 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\sum_of_all_the_odd_numbers.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE sum_of_all_the_odd_numbers.asm SET(SMALL) DEBUG PRINT(.\Listings\sum_of
+                      _all_the_odd_numbers.lst) OBJECT(.\Objects\sum_of_all_the_odd_numbers.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H
+0000 020100            2     LJMP MAIN
+0100                   3     ORG 100H
+                       4     
+0100                   5     MAIN:
+0100 3138              6         CALL ODDSUM
+0102                   7     HERE: 
+0102 80FE              8         SJMP HERE
+                       9     
+0130                  10     ORG 130H
+0130                  11     ODD:
+0130 5401             12         ANL A, #01H     
+0132 B4000D           13         CJNE A, #00H, ADDITION 
+0135 B4010F           14         CJNE A, #01H, SKIP_ADD 
+0138                  15     ODD_RET:
+                      16     
+                      17     
+0138                  18     ODDSUM:
+0138 7860             19         MOV R0, #60H    
+013A 7F08             20         MOV R7, #08H    
+013C E4               21         CLR A           
+013D F570             22         MOV 70H, A      
+                      23     
+013F                  24     ODDSUM_LOOP:
+013F E6               25         MOV A, @R0     
+0140 80EE             26             SJMP ODD      
+                      27     
+0142                  28     ADDITION:
+0142 E6               29             MOV A, @R0
+0143 2570             30             ADD A, 70H      
+0145 F570             31         MOV 70H, A      
+                      32     
+0147                  33     SKIP_ADD:
+0147 08               34         INC R0          
+0148 DFF5             35         DJNZ R7, ODDSUM_LOOP 
+                      36     
+014A 22               37         RET
+                      38     
+                      39     END
+A51 MACRO ASSEMBLER  SUM_OF_ALL_THE_ODD_NUMBERS                                           01/21/2025 15:05:41 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ADDITION . . . . .  C ADDR   0142H   A   
+HERE . . . . . . .  C ADDR   0102H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+ODD. . . . . . . .  C ADDR   0130H   A   
+ODDSUM . . . . . .  C ADDR   0138H   A   
+ODDSUM_LOOP. . . .  C ADDR   013FH   A   
+ODD_RET. . . . . .  C ADDR   0138H   A   
+SKIP_ADD . . . . .  C ADDR   0147H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

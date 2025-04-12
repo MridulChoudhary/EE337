@@ -1,0 +1,103 @@
+C51 COMPILER V9.60.7.0   LCD                                                               02/11/2025 14:28:08 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd.l
+                    -st) TABS(2) OBJECT(.\Objects\lcd.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "lcd.h"
+   3          #include <stdio.h>
+   4          
+   5          /*
+   6              The task performed here is unsigned MAC (Multiply and Accumulate)
+   7              We will get 3 inputs from the switches (P1.3 - P1.0). We shall use LEDs to display which inputs are bein
+             -g fetched from the switches.
+   8              We will multiply these results with some constants -- a*input_1 + b*input_2 + c*input_3
+   9              The final answer is set in the LCD display as output along with all LEDs glowing when tbe output is disp
+             -layed.
+  10          */
+  11          
+  12          // Input texts used everytime to show message in LCD which will be stored in the code segment.
+  13          code unsigned char display_msg1[]="   SET INPUT 1  ";
+  14          code unsigned char display_msg2[]="   SET INPUT 2  ";
+  15          code unsigned char display_msg3[]="   SET INPUT 3  ";
+  16          code unsigned char display_msg4[]="  FINAL RESULT  ";
+  17          
+  18          void main()
+  19          {
+  20   1        unsigned int x1 , x2, x3;   // Input Values
+  21   1        unsigned int w0 = 10;       // Constant 1
+  22   1        unsigned int w1 = 10;       // Constant 2
+  23   1        unsigned int w2 = 20;       // Constant 3
+  24   1        unsigned int y;             // Result
+  25   1        char temp[16];
+  26   1        
+  27   1        lcd_init();                 // Initialize LCD
+  28   1        
+  29   1        // Set First Input for LCD
+  30   1        lcd_cmd(0x80);                          //Move cursor to first line
+  31   1        msdelay(4);
+  32   1        lcd_write_string(display_msg1);
+  33   1        
+  34   1        // Get input 1
+  35   1        P1 = 0x1F;        // Setting P1 as input and making LED to represent 1
+  36   1        sdelay(5);        // Wait 5 seconds
+  37   1        x1 = P1 & 0x0F;   // Taking the input collected in Port 1
+  38   1        
+  39   1        // Set Second Input for LCD
+  40   1        lcd_cmd(0x80);                          //Move cursor to first line
+  41   1        msdelay(4);
+  42   1        lcd_write_string(display_msg2);
+  43   1        
+  44   1        // Get input 2
+  45   1        P1 = 0x2F;        // Setting P1 as input and making LED to represent 2
+  46   1        sdelay(5);        // Wait 5 seconds
+  47   1        x2 = P1 & 0x0F;   // Taking the input collected in Port 1
+  48   1        
+  49   1        // Set Second Input for LCD
+  50   1        lcd_cmd(0x80);                          //Move cursor to first line
+  51   1        msdelay(4);
+  52   1        lcd_write_string(display_msg3);
+C51 COMPILER V9.60.7.0   LCD                                                               02/11/2025 14:28:08 PAGE 2   
+
+  53   1        
+  54   1        // Get input 3
+  55   1        P1 = 0x3F;        // Setting P1 as input and making LED to represent 3
+  56   1        sdelay(5);        // Wait 5 seconds
+  57   1        x3 = P1 & 0x0F;   // Taking the input collected in Port 1
+  58   1        
+  59   1        // Perform MAC Operation
+  60   1        y = (w0 * x1) + (x2 * w1) + (x3 * w2);
+  61   1        sprintf(temp, "%d", y);                 // Store the print output to temp variable
+  62   1        
+  63   1        // Display the result with all LEDs turning ON.
+  64   1        lcd_cmd(0x80);                          //Move cursor to first line
+  65   1        msdelay(4);
+  66   1        lcd_write_string(display_msg4);
+  67   1        
+  68   1        // Print the result in second line
+  69   1        lcd_cmd(0xC0);
+  70   1        lcd_write_string(temp);
+  71   1        
+  72   1        
+  73   1        while(1);
+  74   1          
+  75   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    431    ----
+   CONSTANT SIZE    =     71    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      33
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

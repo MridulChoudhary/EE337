@@ -1,0 +1,45 @@
+#include <at89c5131.h>
+#include <math.h>
+#include "lcd.h"
+#include <stdio.h>
+
+code int w0= -36;
+code int w1= 5;
+code int w2= 7;
+
+code unsigned char display_msg1[]="    Input-1     ";						//Display msg on 1st line of lcd
+code unsigned char display_msg2[]="    Input-2     ";	//Display msg on 1st line of lcd
+code unsigned char display_msg3[]="P(Class=1)";	
+code unsigned char display_msg4[]="P(Class=2)";	
+code unsigned char display_msg5[]="    Class-2     ";	
+
+void main()
+{
+	signed int x1,x2,y;
+	float z;
+	lcd_init();
+	lcd_cmd(0x80);													//Move cursor to first line
+	msdelay(4);
+	lcd_write_string(display_msg1);
+	lcd_cmd(0xC0);													//Move cursor to 2nd line of LCD
+	P1= 0x0F;
+	msdelay(5000);
+		x1 = P1;
+	lcd_cmd (0x01);
+	lcd_write_string(display_msg2);
+	P1= 0x0F;
+	msdelay(5000);
+		x2 = P1;
+	y = (1*w0)+(x1*w1)+(x2*w2);
+	z=1/(1+exp(-y));
+	
+	lcd_cmd (0x01);
+		lcd_cmd(0x80);
+	lcd_write_string(display_msg3);
+	lcd_float(1-z);
+	lcd_cmd (0xC0);
+	lcd_write_string(display_msg4);
+	lcd_float(z);
+	
+	while(1);
+}

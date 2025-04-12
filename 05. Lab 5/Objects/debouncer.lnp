@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\debounce.obj" 
+TO ".\Objects\debouncer" 
+PRINT(".\Listings\debouncer.m51") RAMSIZE(256) 

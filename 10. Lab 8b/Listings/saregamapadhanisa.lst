@@ -1,0 +1,125 @@
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/25/2025 13:55:49 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SAREGAMAPADHANISA
+OBJECT MODULE PLACED IN .\Objects\saregamapadhanisa.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE saregamapadhanisa.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\saregamapadhanisa.lst) TABS(2) OBJECT(.\Objects\saregamapadhanisa.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "lcd.h"
+   3          #include "serial.h"
+   4          
+   5          sbit speaker = P0^7;
+   6          
+   7          unsigned char current_th0, current_tl0;
+   8          unsigned char current_key = 0;
+   9          
+  10          // Timer0 ISR for tone generation
+  11          void timer0_isr(void) interrupt 1 {
+  12   1          speaker = ~speaker;       // Toggle speaker
+  13   1          TH0 = current_th0;        // Reload timer values
+  14   1          TL0 = current_tl0;
+  15   1      }
+  16          
+  17          void main(void) {
+  18   1          unsigned char key;
+  19   1          
+  20   1          lcd_init();               // Initialize LCD
+  21   1          uart_init();              // Initialize UART
+  22   1          lcd_cmd(0x80);
+  23   1          lcd_write_string("Press a key...");
+  24   1      
+  25   1          TMOD |= 0x01;             // Timer0 in Mode 1 (16-bit)
+  26   1          ET0 = 1;                  // Enable Timer0 interrupt
+  27   1          EA = 1;                   // Global interrupt enable
+  28   1      
+  29   1          while(1) {
+  30   2              if(RI) {     // Check if UART received a key
+  31   3                 RI = 0;
+  32   3      
+  33   3                  key = SBUF;       // Read the received key
+  34   3      
+  35   3                  lcd_cmd(0x01);    // Clear LCD
+  36   3                  lcd_cmd(0x80);
+  37   3      
+  38   3          
+  39   3                  switch(key) {
+  40   4                      case 's':     // Sa (Low)
+  41   4                          current_th0 = 0xEF;
+  42   4                          current_tl0 = 0xB9;
+  43   4                          lcd_write_string("Sa(Low)");
+  44   4                          TR0 = 1;
+  45   4                          break;
+  46   4                      case 'r':     // Re
+  47   4                          current_th0 = 0xF1;
+  48   4                          current_tl0 = 0x88;
+  49   4                          lcd_write_string("Re");
+  50   4                          TR0 = 1;
+  51   4                          break;
+  52   4                      case 'g':     // Ga
+  53   4                          current_th0 = 0xF2;
+  54   4                          current_tl0 = 0xFB;
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/25/2025 13:55:49 PAGE 2   
+
+  55   4                          lcd_write_string("Ga");
+  56   4                          TR0 = 1;
+  57   4                          break;
+  58   4                      case 'm':     // Ma
+  59   4                          current_th0 = 0xF3;
+  60   4                          current_tl0 = 0xCB;
+  61   4                          lcd_write_string("Ma");
+  62   4                          TR0 = 1;
+  63   4                          break;
+  64   4                      case 'p':     // Pa
+  65   4                          current_th0 = 0xF5;
+  66   4                          current_tl0 = 0x26;
+  67   4                          lcd_write_string("Pa");
+  68   4                          TR0 = 1;
+  69   4                          break;
+  70   4                      case 'd':     // Dha
+  71   4                          current_th0 = 0xF6;
+  72   4                          current_tl0 = 0x3C;
+  73   4                          lcd_write_string("Dha");
+  74   4                          TR0 = 1;
+  75   4                          break;
+  76   4                      case 'n':     // Ni
+  77   4                          current_th0 = 0xF7;
+  78   4                          current_tl0 = 0x52;
+  79   4                          lcd_write_string("Ni");
+  80   4                          TR0 = 1;
+  81   4                          break;
+  82   4                      case 'a':     // Sa (High)
+  83   4                          current_th0 = 0xF7;
+  84   4                          current_tl0 = 0xDD;
+  85   4                          lcd_write_string("Sa(High)");
+  86   4                          TR0 = 1;
+  87   4                          break;
+  88   4                      case 'q':     // Silence
+  89   4                          TR0 = 0;
+  90   4                          speaker = 0;
+  91   4                          lcd_write_string("Silence");
+  92   4                          break;
+  93   4                      default:
+  94   4                          lcd_write_string("Invalid Key");
+  95   4                          break;
+  96   4                  }
+  97   3              }
+  98   2          }
+  99   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    493    ----
+   CONSTANT SIZE    =     71    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,357 @@
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SAREGAMAPADHANISA
+OBJECT MODULE PLACED IN .\Objects\SaReGaMaPaDhaNiSa.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE SaReGaMaPaDhaNiSa.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\SaReGaMaPaDhaNiSa.lst) TABS(2) OBJECT(.\Objects\SaReGaMaPaDhaNiSa.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "lcd.h"
+   3          #include <stdio.h>
+   4          #include <string.h>
+   5          
+   6          // Instead of adding <string.h>, we can use the following declaration
+   7          // char *strcpy(char *dest, const char *src);  // Function prototype
+   8          
+   9          
+  10          sbit OUTPUT = P0^7;
+  11          int x=0;
+  12          
+  13          sbit Row_0 = P3^4;
+  14          sbit Row_1 = P3^5;
+  15          sbit Row_2 = P3^6;
+  16          sbit Row_3 = P3^7;
+  17          
+  18          sbit Col_0 = P3^3;
+  19          sbit Col_1 = P3^2;
+  20          sbit Col_2 = P3^1;
+  21          sbit Col_3 = P3^0;
+  22          
+  23            int k;
+  24            int l;
+  25            int pin1 = 0x01;
+  26            int pin2 = 0x01;
+  27            int value1;
+  28            int value2;
+  29          //  char *temp1;
+  30            char temp[16];
+  31            char temp2[16];
+  32          
+  33          //0xEFB9  --  240Hz   change to this value in all parts of the code for 240Hz
+  34          //0xF063  --  240Hz
+  35          //0xF188  --  270Hz
+  36          //0xF2FB  --  300Hz
+  37          //0xF3CB  --  320Hz
+  38          //0xF526  --  360Hz
+  39          //0xF63C  --  400Hz 
+  40          //0xF752  --  450Hz
+  41          //0xF7DD  --  480Hz
+  42          
+  43          /*  
+  44          void msdelay(unsigned int time) {
+  45              int i, j;
+  46              for (i = 0; i < time; i++) {
+  47                  for (j = 0; j < 382; j++);
+  48              }
+  49          }
+  50          */
+  51          
+  52          void timer0_isr () interrupt 1
+  53          {
+  54   1          switch (x) {
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 2   
+
+  55   2          case 1:
+  56   2              OUTPUT = ~OUTPUT;
+  57   2              TH0 = 0xEF;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  58   2              TL0 = 0xB9;
+  59   2              TR0 = 1;       // Restart timer
+  60   2              break;
+  61   2      
+  62   2          case 2:
+  63   2              OUTPUT = ~OUTPUT;
+  64   2              TH0 = 0xF1;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  65   2              TL0 = 0x88;
+  66   2              TR0 = 1;       // Restart timer
+  67   2              break;
+  68   2      
+  69   2          case 3:
+  70   2              OUTPUT = ~OUTPUT;
+  71   2              TH0 = 0xF2;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  72   2              TL0 = 0xFB;
+  73   2              TR0 = 1;       // Restart timer
+  74   2              break;
+  75   2      
+  76   2          case 4:
+  77   2              OUTPUT = ~OUTPUT;
+  78   2              TH0 = 0xF3;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  79   2              TL0 = 0xCB;
+  80   2              TR0 = 1;       // Restart timer
+  81   2              break;
+  82   2      
+  83   2          case 5:
+  84   2              OUTPUT = ~OUTPUT;
+  85   2              TH0 = 0xF5;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  86   2              TL0 = 0x26;
+  87   2              TR0 = 1;       // Restart timer
+  88   2              break;
+  89   2      
+  90   2          case 6:
+  91   2              OUTPUT = ~OUTPUT;
+  92   2              TH0 = 0xF6;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+  93   2              TL0 = 0x3C;
+  94   2              TR0 = 1;       // Restart timer
+  95   2              break;
+  96   2          
+  97   2          case 7:
+  98   2              OUTPUT = ~OUTPUT;
+  99   2              TH0 = 0xF7;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+ 100   2              TL0 = 0x52;
+ 101   2              TR0 = 1;       // Restart timer
+ 102   2              break;
+ 103   2      
+ 104   2          case 8:
+ 105   2              OUTPUT = ~OUTPUT;
+ 106   2              TH0 = 0xF7;    // Reload for 1.5 ms delay (since 3 ms period requires toggling every 1.5 ms)
+ 107   2              TL0 = 0xDD;
+ 108   2              TR0 = 1;       // Restart timer
+ 109   2              break;
+ 110   2          
+ 111   2          case 9:
+ 112   2              OUTPUT = 0;
+ 113   2              break;
+ 114   2          
+ 115   2      //    default:
+ 116   2      //        printf("Default case is Matched.");
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 3   
+
+ 117   2      //        break;
+ 118   2          }
+ 119   1      }
+ 120          
+ 121          
+ 122          void main() {
+ 123   1        TMOD = 0x01; //Timer 0 in mod 1
+ 124   1        TH0 = 0xEF;
+ 125   1        TL0 = 0xB9;
+ 126   1        ET0 = 1; //activate interrupts for both timers
+ 127   1        EA = 1;  //activate global interrupts
+ 128   1        TR0 = 1; //start timer 0
+ 129   1      
+ 130   1      //  P3 = 0x0F;
+ 131   1        Row_0 = Row_1 = Row_2 = Row_3 = 0;
+ 132   1        Col_0 = Col_1 = Col_2 = Col_3 = 1;
+ 133   1        lcd_init();                 // Initialize LCD
+ 134   1      
+ 135   1        while(1){
+ 136   2          Row_0 = Row_1 = Row_2 = Row_3 = 0;
+ 137   2          Col_0 = Col_1 = Col_2 = Col_3 = 1;
+ 138   2          for(k=0; k<4; k++){
+ 139   3            pin1 = 0x01;
+ 140   3            value1 = P3 & (pin1 << k);
+ 141   3            if (value1 == 0){
+ 142   4              msdelay(20);
+ 143   4              value1 = P3 & (pin1 << k);
+ 144   4              if (value1 == 0){
+ 145   5                for(l=0; l<4; l++){
+ 146   6      //            pin2 = 0x01;
+ 147   6      //            value2 = P3 & (pin1 << (l + 4));
+ 148   6                  if(l == 0){
+ 149   7                    Row_0 = 0;
+ 150   7                    Row_1 = Row_2 = Row_3 = 1;
+ 151   7                    value1 = P3 & (pin1 << k);
+ 152   7                    if(value1 == 0){
+ 153   8      /*                sprintf(temp2, "%d", l);                  // Store the print output to temp variable
+ 154   8                      lcd_cmd(0x80);                          //Move cursor to first line
+ 155   8                      lcd_write_string(temp2);
+ 156   8                      sprintf(temp, "%d", 3-k);                 // Store the print output to temp variable
+ 157   8                      lcd_cmd(0xC0);
+ 158   8                      lcd_write_string(temp);
+ 159   8      */
+ 160   8                      if(k == 0){
+ 161   9                        *temp = 'A';
+ 162   9                        lcd_cmd(0x01); // Clear display command
+ 163   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 164   9                        lcd_write_char(*temp);
+ 165   9                      }
+ 166   8                      if(k == 1){
+ 167   9      //                  temp = '3';
+ 168   9                        strcpy(temp, "Ga");
+ 169   9                        x = 3;
+ 170   9                        lcd_cmd(0x01); // Clear display command
+ 171   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 172   9                        lcd_write_string(temp);
+ 173   9                      }
+ 174   8                      if(k == 2){
+ 175   9      //                  temp = '2';
+ 176   9                        strcpy(temp, "Re");
+ 177   9                        x = 2;
+ 178   9                        lcd_cmd(0x01); // Clear display command
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 4   
+
+ 179   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 180   9                        lcd_write_string(temp);
+ 181   9                      }
+ 182   8                      if(k == 3){
+ 183   9      //                  temp = '1';
+ 184   9                        strcpy(temp, "Sa");
+ 185   9                        x = 1;
+ 186   9                        lcd_cmd(0x01); // Clear display command
+ 187   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 188   9                        lcd_write_string(temp);
+ 189   9                      }               
+ 190   8                    }
+ 191   7                  }
+ 192   6                  if(l == 1){
+ 193   7                    Row_1 = 0;
+ 194   7                    Row_0 = Row_2 = Row_3 = 1;
+ 195   7                    value1 = P3 & (pin1 << k);
+ 196   7                    if(value1 == 0){
+ 197   8      /*                sprintf(temp2, "%d", l);                  // Store the print output to temp variable
+ 198   8                      lcd_cmd(0x80);                          //Move cursor to first line
+ 199   8                      lcd_write_string(temp2);
+ 200   8                      sprintf(temp, "%d", 3-k);                 // Store the print output to temp variable
+ 201   8                      lcd_cmd(0xC0);
+ 202   8                      lcd_write_string(temp);             
+ 203   8      */
+ 204   8                      if(k == 0){
+ 205   9                        *temp = 'B';
+ 206   9                        lcd_cmd(0x01); // Clear display command
+ 207   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 208   9                        lcd_write_char(*temp);
+ 209   9                      }
+ 210   8                      if(k == 1){
+ 211   9      //                  temp = '6';
+ 212   9                        strcpy(temp, "Dha");
+ 213   9                        x = 6;
+ 214   9                        lcd_cmd(0x01); // Clear display command
+ 215   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 216   9                        lcd_write_string(temp);
+ 217   9                      }
+ 218   8                      if(k == 2){
+ 219   9      //                  temp = '5';
+ 220   9                        strcpy(temp, "Pa");
+ 221   9                        x = 5;
+ 222   9                        lcd_cmd(0x01); // Clear display command
+ 223   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 224   9                        lcd_write_string(temp);
+ 225   9                      }
+ 226   8                      if(k == 3){
+ 227   9      //                  temp = '4';
+ 228   9                        strcpy(temp, "Ma");
+ 229   9                        x = 4;
+ 230   9                        lcd_cmd(0x01); // Clear display command
+ 231   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 232   9                        lcd_write_string(temp);
+ 233   9                      }                               
+ 234   8                      }
+ 235   7                  }
+ 236   6                  if(l == 2){
+ 237   7                    Row_2 = 0;
+ 238   7                    Row_0 = Row_1 = Row_3 = 1;
+ 239   7                    value1 = P3 & (pin1 << k);
+ 240   7                    if(value1 == 0){
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 5   
+
+ 241   8      /*                sprintf(temp2, "%d", l);                  // Store the print output to temp variable
+ 242   8                      lcd_cmd(0x80);                          //Move cursor to first line
+ 243   8                      lcd_write_string(temp2);
+ 244   8                      sprintf(temp, "%d", 3-k);                 // Store the print output to temp variable
+ 245   8                      lcd_cmd(0xC0);
+ 246   8                      lcd_write_string(temp);             
+ 247   8      */              
+ 248   8                      if(k == 0){
+ 249   9                        *temp = 'C';
+ 250   9                        lcd_cmd(0x01); // Clear display command
+ 251   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 252   9                        lcd_write_char(*temp);
+ 253   9                      }
+ 254   8                      if(k == 1){
+ 255   9      //                  temp = '9';
+ 256   9                        strcpy(temp, "Silence");
+ 257   9                        x = 9;
+ 258   9                        lcd_cmd(0x01); // Clear display command
+ 259   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 260   9                        lcd_write_string(temp);
+ 261   9                      }
+ 262   8                      if(k == 2){
+ 263   9      //                  temp = '8';
+ 264   9                        strcpy(temp, "Sa");
+ 265   9                        x = 8;
+ 266   9                        lcd_cmd(0x01); // Clear display command
+ 267   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 268   9                        lcd_write_string(temp);
+ 269   9                      }
+ 270   8                      if(k == 3){
+ 271   9      //                  temp = '7';
+ 272   9                        strcpy(temp, "Ni");
+ 273   9                        x = 7;
+ 274   9                        lcd_cmd(0x01); // Clear display command
+ 275   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 276   9                        lcd_write_string(temp);
+ 277   9                      }                             
+ 278   8                    }
+ 279   7                  }           
+ 280   6                  if(l == 3){
+ 281   7                    Row_3 = 0;
+ 282   7                    Row_0 = Row_1 = Row_2 = 1;
+ 283   7                    value1 = P3 & (pin1 << k);
+ 284   7                    if(value1 == 0){
+ 285   8      /*                sprintf(temp2, "%d", l);                  // Store the print output to temp variable
+ 286   8                      lcd_cmd(0x80);                          //Move cursor to first line
+ 287   8                      lcd_write_string(temp2);
+ 288   8                      sprintf(temp, "%d", 3-k);                 // Store the print output to temp variable
+ 289   8                      lcd_cmd(0xC0);
+ 290   8                      lcd_write_string(temp);             
+ 291   8      */              
+ 292   8                      if(k == 0){
+ 293   9                        *temp = 'D';
+ 294   9                        lcd_cmd(0x01); // Clear display command
+ 295   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 296   9                        lcd_write_char(*temp);
+ 297   9                      }
+ 298   8                      if(k == 1){
+ 299   9                        *temp = '#';
+ 300   9                        lcd_cmd(0x01); // Clear display command
+ 301   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 302   9                        lcd_write_char(*temp);
+C51 COMPILER V9.60.7.0   SAREGAMAPADHANISA                                                 03/11/2025 15:26:02 PAGE 6   
+
+ 303   9                      }
+ 304   8                      if(k == 2){
+ 305   9                        *temp = '0';
+ 306   9                        lcd_cmd(0x01); // Clear display command
+ 307   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 308   9                        lcd_write_char(*temp);
+ 309   9                      }
+ 310   8                      if(k == 3){
+ 311   9                        *temp = '*';
+ 312   9                        lcd_cmd(0x01); // Clear display command
+ 313   9                        lcd_cmd(0x80);                          //Move cursor to first line
+ 314   9                        lcd_write_char(*temp);
+ 315   9                      }                             
+ 316   8                    }
+ 317   7                  }
+ 318   6                }
+ 319   5              }
+ 320   4            }
+ 321   3          }
+ 322   2        } 
+ 323   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1121    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     46       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

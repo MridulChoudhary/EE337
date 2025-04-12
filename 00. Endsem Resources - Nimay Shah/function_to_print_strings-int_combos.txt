@@ -1,0 +1,18 @@
+void string_maker(unsigned int a, unsigned int b, unsigned int c, unsigned int d){
+transmit_string("8051- ");
+a_c = a + '0';
+transmit_char(a_c);
+transmit_string("\r\n");
+transmit_string("TIVA-C- ");
+b_c = b + '0';
+transmit_char(b_c);
+transmit_string("\r\n");
+transmit_string("Atmega328p- ");
+c_c = c + '0';
+transmit_char(c_c);
+transmit_string("\r\n");
+transmit_string("STM32- ");
+d_c = d + '0';
+transmit_char(d_c);
+transmit_string("\r\n");
+}	

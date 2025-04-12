@@ -1,0 +1,69 @@
+A51 MACRO ASSEMBLER  DELAY_1S                                                             01/28/2025 15:01:43 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\delay_1s.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE delay_1s.asm SET(SMALL) DEBUG PRINT(.\Listings\delay_1s.lst) OBJECT(.\O
+                      bjects\delay_1s.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     
+0000                   2     ORG 0H
+0000 020100            3     LJMP MAIN
+0100                   4     ORG 100H
+0100                   5     MAIN:
+0100 759001            6     MOV P1, #01H
+0103 3130              7     CALL delay_1sec
+0105 759000            8     MOV P1, #00H
+0108 80FE              9     HERE: SJMP HERE
+                      10     
+0130                  11     ORG 130H
+                      12     
+0130                  13     delay_1sec:
+0130 C000             14     push 00h
+0132 7864             15     mov r0, #100
+0134 313B             16     h3: acall delay_10ms
+0136 D8FC             17     djnz r0, h3
+0138 D000             18     pop 00h
+013A 22               19     ret
+013B                  20     delay_10ms:
+013B C000             21     push 00h
+013D 7828             22     mov r0, #40
+013F 3146             23     h2: acall delay_250us
+0141 D8FC             24     djnz r0, h2
+0143 D000             25     pop 00h
+0145 22               26     ret
+0146                  27     delay_250us:
+0146 C000             28     push 00h
+0148 78F4             29     mov r0, #244
+014A D8FE             30     h1: djnz r0, h1
+014C D000             31     pop 00h
+014E 22               32     ret
+                      33     
+                      34     
+                      35     
+                      36     END
+A51 MACRO ASSEMBLER  DELAY_1S                                                             01/28/2025 15:01:43 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY_10MS . . . .  C ADDR   013BH   A   
+DELAY_1SEC . . . .  C ADDR   0130H   A   
+DELAY_250US. . . .  C ADDR   0146H   A   
+H1 . . . . . . . .  C ADDR   014AH   A   
+H2 . . . . . . . .  C ADDR   013FH   A   
+H3 . . . . . . . .  C ADDR   0134H   A   
+HERE . . . . . . .  C ADDR   0108H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

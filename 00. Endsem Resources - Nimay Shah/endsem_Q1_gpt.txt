@@ -1,0 +1,103 @@
+#include <8051.h>
+
+#define TIMER_CLOCK_FREQ 11059200UL
+
+void start_timer() {
+    TMOD = 0x01;  // Timer 0, Mode 1 (16-bit timer)
+    TR0 = 1;      // Start Timer 0
+}
+
+void stop_timer() {
+    TR0 = 0;      // Stop Timer 0
+}
+
+unsigned long multiply_theodore(unsigned long a, unsigned long b) {
+    unsigned long a1, a0, b1, b0, c0, c1, c2, c3, c;
+    
+    a1 = a / 10;
+    a0 = a % 10;
+    b1 = b / 10;
+    b0 = b % 10;
+    
+    c0 = a0 * b0;
+    c1 = a0 * b1;
+    c2 = a1 * b0;
+    c3 = a1 * b1;
+    
+    c = c0 + (c1 + c2) * 10 + c3 * 100;
+    
+    return c;
+}
+
+void main() {
+    unsigned long a = 29851;
+    unsigned long b = 11237;
+    unsigned long result;
+    unsigned long time_taken;
+    
+    start_timer();
+    result = multiply_theodore(a, b);
+    stop_timer();
+    
+    // Calculate time taken in microseconds
+    time_taken = (65536UL - (unsigned long)TH0) * 1000000UL / TIMER_CLOCK_FREQ;
+    
+    // Display result and time taken on LCD
+    // Implement your LCD display function here
+    
+    // Example: display(result, time_taken);
+}
+
+
+
+Benjamin's Algorithm Implementation:
+
+
+#include <8051.h>
+
+#define TIMER_CLOCK_FREQ 11059200UL
+
+void start_timer() {
+    TMOD = 0x01;  // Timer 0, Mode 1 (16-bit timer)
+    TR0 = 1;      // Start Timer 0
+}
+
+void stop_timer() {
+    TR0 = 0;      // Stop Timer 0
+}
+
+unsigned long multiply_benjamin(unsigned long a, unsigned long b) {
+    unsigned long a1, a0, b1, b0, c0, c1, c2, c;
+    
+    a1 = a / 10;
+    a0 = a % 10;
+    b1 = b / 10;
+    b0 = b % 10;
+    
+    c0 = a0 * b0;
+    c1 = (a0 + a1) * (b0 + b1);
+    c2 = a1 * b1;
+    
+    c = c0 + (c1 - c0 - c2) * 10 + c2 * 100;
+    
+    return c;
+}
+
+void main() {
+    unsigned long a = 29851;
+    unsigned long b = 11237;
+    unsigned long result;
+    unsigned long time_taken;
+    
+    start_timer();
+    result = multiply_benjamin(a, b);
+    stop_timer();
+    
+    // Calculate time taken in microseconds
+    time_taken = (65536UL - (unsigned long)TH0) * 1000000UL / TIMER_CLOCK_FREQ;
+    
+    // Display result and time taken on LCD
+    // Implement your LCD display function here
+    
+    // Example: display(result, time_taken);
+}

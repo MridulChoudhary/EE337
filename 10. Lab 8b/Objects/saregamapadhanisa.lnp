@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\saregamapadhanisa.obj" 
+TO ".\Objects\saregamapadhanisa" 
+PRINT(".\Listings\saregamapadhanisa.m51") RAMSIZE(256) 

@@ -1,0 +1,57 @@
+#include <AT89C5131A.h>
+
+// Timer frequency
+#define TIMER_FREQ 11059200UL  // Assuming 11.0592 MHz crystal frequency
+
+// Function to start Timer 0
+void start_timer() {
+    TMOD &= 0xF0;   // Clear previous timer mode for Timer 0
+    TMOD |= 0x01;   // Set Timer 0 in mode 1 (16-bit timer)
+    TR0 = 1;        // Start Timer 0
+}
+
+// Function to stop Timer 0
+void stop_timer() {
+    TR0 = 0;        // Stop Timer 0
+}
+
+// Function to read the timer value
+unsigned int read_timer() {
+    return ((TH0 << 8) | TL0);  // Concatenate TH0 and TL0 to get the timer value
+}
+
+void main() {
+    unsigned int start_time, end_time, elapsed_time;
+
+    // Initialize Timer 0
+    TH0 = 0;
+    TL0 = 0;
+
+    // Start Timer
+    start_timer();
+
+    // Your code to measure time goes here
+    // Example: delay some arbitrary time
+    // Replace this with your actual code to be measured
+    for (unsigned int i = 0; i < 10000; i++) {
+        for (unsigned int j = 0; j < 100; j++) {
+            // Some delay loop
+        }
+    }
+
+    // Stop Timer
+    stop_timer();
+
+    // Read Timer value
+    end_time = read_timer();
+
+    // Calculate elapsed time
+    elapsed_time = end_time;
+
+    // Display the elapsed time (in microseconds)
+    // Assume 1 machine cycle = 12 oscillator periods
+    elapsed_time = (elapsed_time * 12) / (TIMER_FREQ / 1000000UL);
+
+    // Now you can use 'elapsed_time' for further processing or display
+    // Example: Display the elapsed time using your LCD or UART function
+}

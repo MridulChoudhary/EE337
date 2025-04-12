@@ -1,0 +1,13 @@
+	lcd_cmd(0x38);	// Function set: 2 Line, 8-bit, 5x7 dots
+	
+	lcd_cmd(0x06);	// Entry mode, auto increment with no shift
+	
+	lcd_cmd(0x0C);	// Display on, Curson off
+
+	lcd_cmd(0x01);	// LCD clear
+	
+	lcd_cmd(0x80);	//Move cursor to Row 1 column 0
+
+	lcd_cmd(0xC0);  //Move cursor to 2nd line of LCD
+
+	lcd_float(z);   //use file lcd_float_write... to directly write this as a float

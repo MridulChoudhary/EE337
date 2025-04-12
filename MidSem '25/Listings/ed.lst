@@ -1,0 +1,125 @@
+A51 MACRO ASSEMBLER  ED                                                                   02/08/2025 16:36:00 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\ed.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE ed.asm SET(SMALL) DEBUG PRINT(.\Listings\ed.lst) OBJECT(.\Objects\ed.ob
+                      j) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H                                   
+0000 020100            2     LJMP MAIN                               
+                       3     
+0100                   4     ORG 100H                                
+0100                   5     MAIN:                                   
+0100 3130              6     CALL MAKE_PRIME
+0102 3174              7     CALL ENCRYPT
+0104 80FE              8     HERE: SJMP HERE
+0130                   9     ORG 130H
+                      10     
+0130                  11     MAKE_PRIME: 
+0130 757003           12             MOV 70H, #03H
+0133 757104           13             MOV 71H, #04H
+0136 757504           14             MOV 75H, #04H
+0139 757403           15             MOV 74H, #03H
+                      16             
+013C AB70             17         MOV R3, 70H
+013E 7901             18             MOV R1, #01H
+0140 8B79             19             MOV 79H, R3
+0142 AA79             20             MOV R2, 79H
+0144 1A               21             DEC R2
+0145 3163             22             CALL IS_PRIME
+0147 8B70             23             MOV 70H, R3
+                      24             
+0149 AB71             25             MOV R3, 71H
+014B 7901             26             MOV R1, #01H
+014D 8B79             27             MOV 79H, R3
+014F AA79             28             MOV R2, 79H
+0151 1A               29             DEC R2
+0152 3163             30             CALL IS_PRIME
+0154 8B71             31             MOV 71H, R3
+0156 22               32             RET
+                      33             
+0157                  34     CHECK: 
+0157 89F0             35             MOV B, R1
+0159 EB               36             MOV A, R3
+015A 84               37             DIV AB 
+015B ACF0             38             MOV R4, B
+015D BC0003           39             CJNE R4, #00H, IS_PRIME
+0160 3169             40             CALL INCREASE
+0162 22               41             RET
+                      42             
+0163                  43     IS_PRIME:
+0163 09               44             INC R1
+0164 1A               45             DEC R2
+0165 BA00EF           46             CJNE R2, #00H, CHECK
+0168 22               47             RET
+                      48             
+0169                  49     INCREASE:
+0169 0B               50             INC R3
+016A 7901             51             MOV R1, #01H
+016C 8B79             52             MOV 79H, R3
+016E AA79             53             MOV R2, 79H
+0170 1A               54             DEC R2
+0171 3163             55             CALL IS_PRIME
+0173 22               56             RET
+                      57     
+A51 MACRO ASSEMBLER  ED                                                                   02/08/2025 16:36:00 PAGE     2
+
+0174                  58     ENCRYPT:
+0174 E570             59             MOV A, 70H
+0176 8571F0           60             MOV B, 71H
+0179 A4               61             MUL AB
+017A F573             62             MOV 73H, A
+017C E570             63             MOV A, 70H
+017E 8571F0           64             MOV B, 71H
+0181 14               65             DEC A
+0182 15F0             66             DEC B
+0184 A4               67             MUL AB 
+0185 F572             68             MOV 72H, A
+                      69             
+0187 AC74             70             MOV R4, 74H
+0189 1C               71             DEC R4
+018A E575             72             MOV A, 75H
+018C 3196             73             CALL EXPONENT
+018E 8573F0           74             MOV B, 73H
+0191 84               75             DIV AB 
+0192 85F076           76             MOV 76H,B
+0195 22               77             RET
+                      78     
+0196                  79     EXPONENT:
+0196 8575F0           80             MOV B, 75H
+0199 A4               81             MUL AB 
+019A 1C               82             DEC R4
+019B BC00F8           83             CJNE R4, #00H, EXPONENT
+019E 22               84             RET
+                      85             
+019F                  86     DECRYPTION:
+                      87             
+                      88     
+                      89     END
+A51 MACRO ASSEMBLER  ED                                                                   02/08/2025 16:36:00 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CHECK. . . . . . .  C ADDR   0157H   A   
+DECRYPTION . . . .  C ADDR   019FH   A   
+ENCRYPT. . . . . .  C ADDR   0174H   A   
+EXPONENT . . . . .  C ADDR   0196H   A   
+HERE . . . . . . .  C ADDR   0104H   A   
+INCREASE . . . . .  C ADDR   0169H   A   
+IS_PRIME . . . . .  C ADDR   0163H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+MAKE_PRIME . . . .  C ADDR   0130H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

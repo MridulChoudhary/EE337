@@ -1,0 +1,183 @@
+#include <at89c5131.h>
+#include <serial.h>
+#include <ctype.h>
+code unsigned char name1[]="Account Holder: Steven\r\n";						//Display msg on 1st line of lcd
+code unsigned char name2[]="Account Holder: Gordon\r\n";
+code unsigned char balance[]="Account Balance: ";
+code unsigned char display[]="Enter Amount, in hundreds\r\n";
+code unsigned char notes500display[]="500 Notes: ";
+code unsigned char notes100display[]=", 100 Notes: ";
+code unsigned char balance1_ascii[6]={0,0,0,0,0,'\0'};
+code unsigned char balance2_ascii[6]={0,0,0,0,0,'\0'};
+code unsigned char note500_ascii[3]={0,0,'\0'};
+code unsigned char note100_ascii[3]={0,0,'\0'};
+code unsigned char newline[]="\r\n";
+void int_to_string(unsigned int val,unsigned char *temp_str_data)
+{	
+   // char str_data[4]=0;
+		temp_str_data[0]=48+(val/10000);
+	  temp_str_data[1]=48+(val%10000/1000);
+	  temp_str_data[2]=48+((val%1000)/100);
+	  temp_str_data[3]=48+((val%100)/10);
+	  temp_str_data[4]=48+(val%10);
+   // return str_data;
+}
+void msdelay(unsigned int time)
+{
+	int i,j;
+	for(i = 0; i < time; i++)
+	{
+		for(j = 0; j < 382; j++);
+	}
+}
+int get_amount()
+{
+		int first_digit,second_digit,amount,x1,x2;
+		char ch1,ch2;
+		ch1=receive_char();
+		ch2=receive_char();
+		x1=isdigit(ch1);
+		x2=isdigit(ch2);
+		if(x1==0 || x2==0)
+		{
+		return 100000;
+		}
+		first_digit=ch1-'0';
+		second_digit=ch2-'0';
+		amount=100*(first_digit*10+second_digit);
+		return amount;
+}
+void Account_display(int *balance1,int *balance2)
+{
+	char ch;
+	transmit_string("Hello, Please enter Account Number\r\n");	
+	ch=receive_char();
+	switch(ch)
+	{
+		case '1':
+			transmit_string(name1);
+			transmit_string(balance);
+			int_to_string(*balance1,balance1_ascii);
+			transmit_string(balance1_ascii);
+			transmit_string(newline);
+			break;
+		case '2':
+			transmit_string(name2);
+			transmit_string(balance);
+			int_to_string(*balance2,balance2_ascii);
+			transmit_string(balance2_ascii);
+			transmit_string(newline);
+			break;
+		default:
+			transmit_string("No such account, please enter valid details\r\n");
+		break;
+	}
+}
+void Withdraw_cash(int *balance1,int *balance2)
+{
+	char ch;
+	int note500,note100,amount;
+	transmit_string("Withdraw state, enter account number\r\n");	
+	ch=receive_char();
+	switch(ch)
+	{
+		case '1':
+			transmit_string(name1);
+			transmit_string(balance);
+			int_to_string(*balance1,balance1_ascii);
+			transmit_string(balance1_ascii);
+			transmit_string(newline);
+			transmit_string(display);
+			amount=get_amount();
+			if(amount==100000)
+			{
+				transmit_string("Invalid amount\r\n");
+			}
+			else if(amount>*balance1)
+			{
+				transmit_string("Insufficient funds\r\n");
+			}
+			else
+			{
+				*balance1=*balance1-amount;
+				note500=amount/500;
+				amount=amount-(500*note500);
+				note100=amount/100;
+				transmit_string("Remaining Balance: ");
+				int_to_string(note500,note500_ascii);
+				int_to_string(note100,note100_ascii);
+				transmit_string(notes500display);
+				transmit_string(note500_ascii);
+				transmit_string(notes100display);
+				transmit_string(note100_ascii);
+				transmit_string(newline);
+			}
+			break;
+		case '2':
+			transmit_string(name2);
+			transmit_string(balance);
+			transmit_string(display);
+			int_to_string(*balance1,balance1_ascii);
+			transmit_string(balance1_ascii);
+			transmit_string(newline);
+			amount=get_amount();
+			if(amount==100000)
+			{
+				transmit_string("Invalid amount\r\n");
+			}
+			else if(amount>*balance2)
+			{
+				transmit_string("Insufficient funds\r\n");
+			}
+			else
+			{
+				*balance2=*balance2-amount;
+				note500=amount/500;
+				amount=amount-(500*note500);
+				note100=amount/100;
+				transmit_string("Remaining Balance: ");
+				int_to_string(note500,note500_ascii);
+				int_to_string(note100,note100_ascii);
+				transmit_string(notes500display);
+				transmit_string(note500_ascii);
+				transmit_string(notes100display);
+				transmit_string(note100_ascii);
+				transmit_string(newline);
+			}
+			break;
+		default:
+			transmit_string("No such account, please enter valid details\r\n");
+			break;
+	}
+}
+void main(void)
+{
+	char ch;
+	int balance1=10000;
+	int balance2=10000;
+	uart_init();
+	while(1)
+	{
+			transmit_string("Press A for Account display and W for withdrawing cash\r\n");
+			// Receive a character
+			ch = receive_char();
+		
+			// Decide which test function to run based on character sent
+     		// Displays the string on the terminal software
+			switch(ch)
+			{
+				case 'A':
+				case 'a':
+					Account_display(&balance1,&balance2);
+					break;
+				
+				case 'W':
+				case 'w':
+					Withdraw_cash(&balance1,&balance2);
+					break;
+				default:
+					break;
+			}
+			msdelay(100);
+	}
+}

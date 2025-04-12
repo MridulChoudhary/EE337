@@ -1,0 +1,85 @@
+C51 COMPILER V9.60.7.0   KEYPAD                                                            03/04/2025 15:24:29 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE KEYPAD
+OBJECT MODULE PLACED IN .\Objects\keypad.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE keypad.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\ke
+                    -ypad.lst) TABS(2) OBJECT(.\Objects\keypad.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "lcd.h"
+   3          
+   4          #define ROW_MASK 0xF0  // Mask for row bits (P3.7 - P3.4)
+   5          #define COL_MASK 0x0F  // Mask for column bits (P3.3 - P3.0)
+   6          
+   7          void delay_ms(unsigned int ms) {
+   8   1          unsigned int i, j;
+   9   1          for (i = 0; i < ms; i++)
+  10   1              for (j = 0; j < 382; j++);
+  11   1      }
+  12          
+  13          char scan_keypad() {
+  14   1          char key_map[4][4] = { {'1', '2', '3', 'A'},
+  15   1                                  {'4', '5', '6', 'B'},
+  16   1                                  {'7', '8', '9', 'C'},
+  17   1                                  {'*', '0', '#', 'D'} };
+  18   1          int row, col;
+  19   1          
+  20   1          P3 |= COL_MASK; // Set column pins as input (high)
+  21   1          P3 &= ~ROW_MASK; // Set row pins as output (low)
+  22   1          
+  23   1          if ((P3 & COL_MASK) == COL_MASK) return 0; // No key pressed
+  24   1          
+  25   1          delay_ms(20); // Debounce delay
+  26   1          if ((P3 & COL_MASK) == COL_MASK) return 0; // Confirm no false trigger
+  27   1          
+  28   1          for (row = 0; row < 4; row++) {
+  29   2              P3 |= ROW_MASK; // Set all rows high
+  30   2              P3 &= ~(1 << (row + 4)); // Ground only the current row
+  31   2              
+  32   2              for (col = 0; col < 4; col++) {
+  33   3                  if ((P3 & (1 << col)) == 0 ) { // Check if key is pressed\\\!
+  34   4                      while ((P3 & (1 << col))); // Wait for release\\\!
+  35   4                      return key_map[row][col]; // Return key value
+  36   4                  }
+  37   3              }
+  38   2          }
+  39   1          return 0;
+  40   1      }
+  41          
+  42          void main() {
+  43   1           char key;
+  44   1          lcd_init(); // Initialize LCD
+  45   1         lcd_cmd(0x80); // Move to first line
+  46   1        
+  47   1          lcd_write_string("Keypad Test");
+  48   1          delay_ms(500);
+  49   1          lcd_cmd(0xC0); // Move to second line
+  50   1          lcd_write_string("Press Key:");
+  51   1          
+  52   1         while (1) {
+  53   2              key = scan_keypad();
+  54   2              if (key) {
+C51 COMPILER V9.60.7.0   KEYPAD                                                            03/04/2025 15:24:29 PAGE 2   
+
+  55   3                  lcd_cmd(0xC9); // Move cursor position
+  56   3                  lcd_write_char(key); // Display key on LCD
+  57   3                }
+  58   2          }
+  59   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    434    ----
+   CONSTANT SIZE    =     39    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      19
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,3 @@
+".\Objects\sum_of_all_the_odd_numbers.obj" 
+TO ".\Objects\ODDSUM" 
+PRINT(".\Listings\ODDSUM.m51") RAMSIZE(256) 

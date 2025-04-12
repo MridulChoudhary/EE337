@@ -1,0 +1,3 @@
+TRANSFER
+".\Objects\adc.obj" 
+TO ".\Objects\adc.LIB"

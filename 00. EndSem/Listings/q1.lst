@@ -1,0 +1,381 @@
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE Q1
+OBJECT MODULE PLACED IN .\Objects\q1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE q1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\q1.lst
+                    -) TABS(2) OBJECT(.\Objects\q1.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "serial.h"   
+   3          
+   4          #define idn 6
+   5          #define pn 8
+   6          #define sn 3
+   7          
+   8          char ch;
+   9          int i,j;
+  10          unsigned char id[idn] = {"mridul"};
+  11          unsigned char password[pn] = {"mrid3933"};
+  12          unsigned char input_id[idn] = {"000000"};
+  13          unsigned char input_password[pn] = {"00000000"};
+  14          unsigned int valid;
+  15          unsigned int valid2;
+  16          unsigned char input_seed[sn] = {"000"};
+  17          unsigned long int seed = 3933;
+  18          unsigned char seed_string[sn] = {"000"};
+  19          unsigned long int balance = 5000;
+  20          unsigned int train_prices[3] = {1500, 1000, 1200};
+  21          unsigned char train_no;
+  22          unsigned char passenger_count;
+  23          unsigned long int total_cost;
+  24          unsigned char confirm;
+  25          unsigned int timer_count = 0;
+  26          bit timer_flag = 0;
+  27          bit timeout_occurred = 0;
+  28          unsigned long int otp = 0;
+  29          unsigned char otp_string[sn] = {"000"};
+  30          unsigned char input_otp[sn] = {"000"};
+  31          unsigned int otp_valid = 0;
+  32          
+  33          void check();
+  34          void output();
+  35          void gen_captcha();
+  36          void get_captcha();
+  37          void check_captcha();
+  38          void captcha_output();
+  39          void display_trains();
+  40          void get_train_selection();
+  41          void get_passenger_count();
+  42          void calculate_cost();
+  43          void payment_confirmation();
+  44          void process_payment();
+  45          void display_balance();
+  46          void gen_otp();
+  47          void verify_otp();
+  48          void init_timer();
+  49          void start_timer();
+  50          void timer_isr();
+  51          void check_otp_validity();
+  52          
+  53          void int_to_string(unsigned long int val, unsigned char *temp_str_data)
+  54          { 
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 2   
+
+  55   1          temp_str_data[0]=48+(val/100);
+  56   1          temp_str_data[1]=48+((val%100)/10);
+  57   1          temp_str_data[2]=48+(val%10);
+  58   1      }
+  59          
+  60          void int_to_string_4digit(unsigned long int val, unsigned char *temp_str_data)
+  61          {
+  62   1          temp_str_data[0]=48+(val/1000);
+  63   1          temp_str_data[1]=48+((val%1000)/100);
+  64   1          temp_str_data[2]=48+((val%100)/10);
+  65   1          temp_str_data[3]=48+(val%10);
+  66   1          temp_str_data[4]='\0';
+  67   1      }
+  68          
+  69          void main(void) {
+  70   1          uart_init();
+  71   1          init_timer();
+  72   1          
+  73   1          while(1) {
+  74   2              transmit_string("\n\r Enter Login ID: ");
+  75   2              for(i=0;i<idn;i++){
+  76   3                  ch = receive_char();
+  77   3                  input_id[i] = ch;
+  78   3              }
+  79   2              
+  80   2              transmit_string("\n\r Enter Password: ");
+  81   2              for(j=0;j<pn;j++){
+  82   3                  ch = receive_char();
+  83   3                  input_password[j] = ch;
+  84   3              }
+  85   2      
+  86   2              check();
+  87   2              output();
+  88   2              
+  89   2              if(valid == 1) {
+  90   3                  gen_captcha();
+  91   3                  if(valid2 == 1) {
+  92   4                      display_balance();
+  93   4                      
+  94   4                      display_trains();
+  95   4                      get_train_selection();
+  96   4                      get_passenger_count();
+  97   4                      calculate_cost();
+  98   4                      
+  99   4                      payment_confirmation();
+ 100   4                  }
+ 101   3              }
+ 102   2          }
+ 103   1      }
+ 104          
+ 105          void check() {
+ 106   1          for(i=0;i<idn;i++){
+ 107   2              if(input_id[i] == id[i]){valid=1;}
+ 108   2              else {valid=0;break;}
+ 109   2          }
+ 110   1      
+ 111   1          if(valid==1){
+ 112   2              for(j=0;j<pn;j++){
+ 113   3                  if(input_password[j] == password[j]){valid=1;}
+ 114   3                  else {valid=0;break;}
+ 115   3              }
+ 116   2          }
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 3   
+
+ 117   1      }
+ 118          
+ 119          void output(){
+ 120   1          if(valid==0){
+ 121   2              transmit_string("\r\n Invalid!\r\n");
+ 122   2          }
+ 123   1          else{transmit_string("\r\n Valid!\r\n");}
+ 124   1      }
+ 125          
+ 126          void gen_captcha(){
+ 127   1          long int c1 = 1204;
+ 128   1          long int c2 = 2025;
+ 129   1          int_to_string(seed,seed_string);
+ 130   1          transmit_string("\r\n Captcha: ");
+ 131   1          transmit_string(seed_string);
+ 132   1          seed = ((seed*c1) + c2) % 1000;
+ 133   1          get_captcha();
+ 134   1      }
+ 135          
+ 136          void get_captcha(){
+ 137   1          transmit_string("\r\n Input Captcha: ");
+ 138   1          for(i=0;i<sn;i++){
+ 139   2              ch = receive_char();
+ 140   2              input_seed[i] = ch;
+ 141   2          }
+ 142   1          check_captcha();
+ 143   1      }
+ 144          
+ 145          void check_captcha(){
+ 146   1          for(i=0;i<sn;i++){
+ 147   2              if(input_seed[i] == seed_string[i]){valid2=1;}
+ 148   2              else {valid2=0;break;}
+ 149   2          }
+ 150   1          captcha_output();
+ 151   1      }
+ 152          
+ 153          void captcha_output(){
+ 154   1          if(valid2 == 1){
+ 155   2              transmit_string("\r\n\n Captcha Valid! ");
+ 156   2          }
+ 157   1          else{
+ 158   2              transmit_string("\r\n Invalid! \n");
+ 159   2              gen_captcha();
+ 160   2          }
+ 161   1      }
+ 162          
+ 163          void display_balance() {
+ 164   1          unsigned char bal_str[5];
+ 165   1          int_to_string_4digit(balance, bal_str);
+ 166   1          transmit_string("\r\n\n User wallet balance: Rs. ");
+ 167   1          transmit_string(bal_str);
+ 168   1          transmit_string("\r\n");
+ 169   1      }
+ 170          
+ 171          void display_trains() {
+ 172   1          transmit_string("\r\n Available Trains:");
+ 173   1          transmit_string("\r\n 1 Rajdhani Express - Rs. 1500");
+ 174   1          transmit_string("\r\n 2 Chennai Express - Rs. 1000");
+ 175   1          transmit_string("\r\n 3 Hapa Duronto - Rs. 1200");
+ 176   1          transmit_string("\r\n Enter Train No.: ");
+ 177   1      }
+ 178          
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 4   
+
+ 179          void get_train_selection() {
+ 180   1          ch = receive_char();
+ 181   1          train_no = ch - '0'; 
+ 182   1          
+ 183   1          if(train_no < 1 || train_no > 3) {
+ 184   2              transmit_string("\r\n Invalid Train No.\r\n");
+ 185   2              display_trains();
+ 186   2              get_train_selection();
+ 187   2          } else {
+ 188   2              transmit_char(ch);
+ 189   2          }
+ 190   1      }
+ 191          
+ 192          void get_passenger_count() {
+ 193   1          transmit_string("\r\n Enter number of passengers (max 4): ");
+ 194   1          ch = receive_char();
+ 195   1          passenger_count = ch - '0';
+ 196   1          
+ 197   1          if(passenger_count < 1 || passenger_count > 4) {
+ 198   2              transmit_string("\r\n Max. 4 passengers allowed\r\n");
+ 199   2              get_passenger_count();
+ 200   2          } else {
+ 201   2              transmit_char(ch);
+ 202   2          }
+ 203   1      }
+ 204          
+ 205          void calculate_cost() {
+ 206   1          unsigned char cost_str[5];
+ 207   1          total_cost = train_prices[train_no - 1] * passenger_count;
+ 208   1          int_to_string_4digit(total_cost, cost_str);
+ 209   1          
+ 210   1          transmit_string("\r\n Total Cost: Rs. ");
+ 211   1          transmit_string(cost_str);
+ 212   1          transmit_string("\r\n");
+ 213   1      }
+ 214          
+ 215          
+ 216          void payment_confirmation() {
+ 217   1          transmit_string("\r\n Confirm Txn (y/n): ");
+ 218   1          ch = receive_char();
+ 219   1          confirm = ch;
+ 220   1          transmit_char(ch);
+ 221   1          
+ 222   1          if(confirm == 'y') {
+ 223   2              gen_otp();
+ 224   2              start_timer();
+ 225   2              verify_otp();
+ 226   2          } else if(confirm == 'n') {
+ 227   2              transmit_string("\r\n Txn failed\r\n");
+ 228   2              display_trains();
+ 229   2              get_train_selection();
+ 230   2              get_passenger_count();
+ 231   2              calculate_cost();
+ 232   2              payment_confirmation();
+ 233   2          } else {
+ 234   2              transmit_string("\r\n Invalid input\r\n");
+ 235   2              payment_confirmation();
+ 236   2          }
+ 237   1      }
+ 238          
+ 239          void gen_otp() {
+ 240   1          long int c1 = 1204;
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 5   
+
+ 241   1          long int c2 = 2025;
+ 242   1          otp = ((seed*c1) + c2) % 1000;
+ 243   1          int_to_string(otp, otp_string);
+ 244   1          transmit_string("\r\n OTP: ");
+ 245   1          transmit_string(otp_string);
+ 246   1          seed = otp;
+ 247   1      }
+ 248          
+ 249          void init_timer() {
+ 250   1          TMOD = 0x01;
+ 251   1          ET0 = 1; 
+ 252   1          EA = 1;
+ 253   1          TH0 = 0x3C;
+ 254   1          TL0 = 0xB0;  
+ 255   1      }
+ 256          
+ 257          void start_timer() {
+ 258   1          timer_count = 0;
+ 259   1          timer_flag = 0;
+ 260   1          timeout_occurred = 0;
+ 261   1          TR0 = 1;
+ 262   1      }
+ 263          
+ 264          void stop_timer() {
+ 265   1          TR0 = 0;
+ 266   1      }
+ 267          
+ 268          void timer0_isr(void) interrupt 1 {
+ 269   1          TH0 = 0x3C;
+ 270   1          TL0 = 0xB0;
+ 271   1          
+ 272   1          timer_count++;
+ 273   1          if(timer_count >= 20) {  
+ 274   2              timer_flag = 1;
+ 275   2              stop_timer();
+ 276   2          }
+ 277   1      }
+ 278          
+ 279          void verify_otp() {
+ 280   1          unsigned char received_char = 0;
+ 281   1          unsigned char otp_index = 0;
+ 282   1          transmit_string("\r\n Enter OTP within 10 seconds: ");
+ 283   1          
+ 284   1          while(1) {
+ 285   2              if(timer_flag) {
+ 286   3                  timeout_occurred = 1;
+ 287   3                  break;
+ 288   3              }
+ 289   2              
+ 290   2              if(RI) {
+ 291   3                  received_char = SBUF;
+ 292   3                  RI = 0;
+ 293   3                  transmit_char(received_char);
+ 294   3                  
+ 295   3                  input_otp[otp_index] = received_char;
+ 296   3                  otp_index++;
+ 297   3                  
+ 298   3                  if(otp_index >= 3) {
+ 299   4                      break;
+ 300   4                  }
+ 301   3              }
+ 302   2          }
+C51 COMPILER V9.60.7.0   Q1                                                                04/12/2025 12:59:43 PAGE 6   
+
+ 303   1          
+ 304   1          stop_timer();
+ 305   1          if(timeout_occurred) {
+ 306   2              transmit_string("\r\n Txn failed: Timeout\r\n");
+ 307   2              payment_confirmation();
+ 308   2              return;
+ 309   2          }
+ 310   1          
+ 311   1          check_otp_validity();
+ 312   1      }
+ 313          
+ 314          void check_otp_validity() {
+ 315   1          for(i=0; i<sn; i++) {
+ 316   2              if(input_otp[i] == otp_string[i]) {
+ 317   3                  otp_valid = 1;
+ 318   3              } else {
+ 319   3                  otp_valid = 0;
+ 320   3                  break;
+ 321   3              }
+ 322   2          }
+ 323   1          
+ 324   1          if(otp_valid) {
+ 325   2              process_payment();
+ 326   2          } else {
+ 327   2              transmit_string("\r\n Txn failed: Invalid OTP\r\n");
+ 328   2              payment_confirmation();
+ 329   2          }
+ 330   1      }
+ 331          
+ 332          void process_payment() {
+ 333   1          if(balance < total_cost) {
+ 334   2              transmit_string("\r\n Txn failed: Insufficient Balance\r\n");
+ 335   2              display_trains();
+ 336   2              get_train_selection();
+ 337   2              get_passenger_count();
+ 338   2              calculate_cost();
+ 339   2              payment_confirmation();
+ 340   2          } else {
+ 341   2              balance = balance - total_cost;
+ 342   2              transmit_string("\r\n Booking Successful\r\n");
+ 343   2              display_balance();
+ 344   2              valid = 0;
+ 345   2              valid2 = 0;
+ 346   2          }
+ 347   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1638    ----
+   CONSTANT SIZE    =    631    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     78      43
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,22 @@
+ ORG 0H
+ LJMP MAIN
+ ORG 100H
+ MAIN:
+ CALL XORSWAP
+ HERE: SJMP HERE
+ ORG 130H
+ XORSWAP:
+ 
+ MOV A, 60H
+ MOV B, 61H
+ 
+ XRL A, B 
+ XRL B, A  
+ XRL A, B
+ 
+ MOV 60H, A
+ MOV 61H, B 
+ 
+ RET
+ END	 
+	 

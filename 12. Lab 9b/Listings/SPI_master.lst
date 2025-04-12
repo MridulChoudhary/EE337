@@ -1,0 +1,72 @@
+C51 COMPILER V9.60.7.0   SPI_MASTER                                                        04/08/2025 14:39:56 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPI_MASTER
+OBJECT MODULE PLACED IN .\Objects\SPI_master.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE SPI_master.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\SPI_master.lst) TABS(2) OBJECT(.\Objects\SPI_master.obj)
+
+line level    source
+
+   1          #include "spi.h"
+   2          #include "lcd.h"
+   3          #include <at89c5131.h>
+   4          #include "mcp3008.h"
+   5          
+   6          sbit SS = P3^0;
+   7          
+   8          void main(void) {
+   9   1          unsigned int p1 = 2;
+  10   1          unsigned int p2 = 11;
+  11   1          unsigned int result = 0;
+  12   1          char adc_ip_data_ascii[6]={0,0,0,0,0,'\0'};
+  13   1          
+  14   1          spi_master_init();          
+  15   1          lcd_init();
+  16   1          lcd_write_string("Master Initializing");
+  17   1          
+  18   1          // Send primes to slave
+  19   1          SS = 0;                  // Select slave
+  20   1          spi_trx(p1);         // Send data
+  21   1          SS = 1;
+  22   1          // lcd_write_string("NUM1");
+  23   1          //lcd_cmd(0x01);
+  24   1          msdelay(500);
+  25   1          SS = 0;
+  26   1          spi_trx(p2);
+  27   1          SS = 1;
+  28   1          // lcd_write_string("NUM2");
+  29   1          // lcd_cmd(0x01);
+  30   1          msdelay(500);
+  31   1          // Wait and receive result from slave
+  32   1          result = spi_trx(0);
+  33   1          lcd_cmd(0x01);    // 1 = PRIME, 2 = NOT PRIME
+  34   1          if (result == 1) {
+  35   2              lcd_write_string("PRIME");
+  36   2          } else if(result == 2){
+  37   2              lcd_write_string("NOT PRIME");
+  38   2          }
+  39   1          else
+  40   1          {
+  41   2            lcd_write_string("ERROR 404");
+  42   2            //int_to_string(result, adc_ip_data_ascii);
+  43   2            //lcd_write_string(adc_ip_data_ascii);
+  44   2          }
+  45   1          while (1);  // Keep display on
+  46   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    737    ----
+   CONSTANT SIZE    =     52    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      36
+C51 COMPILER V9.60.7.0   SPI_MASTER                                                        04/08/2025 14:39:56 PAGE 2   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+Note-(1): while using interrupts, make sure you always write a while(1) at
+the end, so the code knows what it has to do.
+
+Note-(2): 

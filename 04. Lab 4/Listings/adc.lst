@@ -1,0 +1,229 @@
+A51 MACRO ASSEMBLER  ADC                                                                  02/04/2025 15:07:53 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\adc.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE adc.asm SET(SMALL) DEBUG PRINT(.\Listings\adc.lst) OBJECT(.\Objects\adc
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     
+0000                   2     ORG 0H
+0000 020100            3     LJMP MAIN
+0100                   4     ORG 100H
+0100                   5     MAIN:
+0100 3165              6     CALL TAKE_INP
+0102 31D0              7     CALL QUANT_ENC
+0104 5102              8     CALL LED_DISP
+0106 80FE              9     HERE: SJMP HERE
+0130                  10     ORG 130H
+                      11     
+0130                  12     DELAY_8s:
+0130 C000             13             PUSH 00H
+0132 7808             14             MOV R0, #8
+0134                  15     h5:
+0134 3146             16             CALL DELAY_1s
+0136 D8FC             17             DJNZ R0, h5
+0138 D000             18             POP 00H
+013A 22               19             RET
+013B                  20     DELAY_4s:
+013B C000             21             PUSH 00H
+013D 7804             22             MOV R0, #4
+013F                  23     h4:
+013F 3146             24             CALL DELAY_1s
+0141 D8FC             25             DJNZ R0, h4
+0143 D000             26             POP 00H
+0145 22               27             RET
+0146                  28     DELAY_1s:
+0146 C000             29             PUSH 00H
+0148 7864             30             MOV R0, #100
+014A                  31     h3: 
+014A 3151             32        CALL delay_10ms 
+014C D8FC             33        DJNZ R0, h3
+014E D000             34        POP 00H
+0150 22               35        RET
+                      36        
+                      37     
+0151                  38     delay_10ms:
+0151 C000             39             push 00h
+0153 7828             40             mov r0, #40
+0155                  41     h2: 
+0155 315C             42             acall delay_250us
+0157 D8FC             43             djnz r0, h2
+0159 D000             44             pop 00h
+015B 22               45             ret
+015C                  46     delay_250us:
+015C C000             47             push 00h
+015E 78F4             48             mov r0, #244
+0160                  49     h1:
+0160 D8FE             50             djnz r0, h1
+0162 D000             51             pop 00h
+0164 22               52             ret
+                      53     
+0165                  54     TAKE_INP:
+0165 75901F           55             MOV P1, #1FH
+0168 3130             56             CALL DELAY_8s
+016A C294             57             CLR P1.4
+A51 MACRO ASSEMBLER  ADC                                                                  02/04/2025 15:07:53 PAGE     2
+
+016C E590             58             MOV A, P1
+016E 23               59             RL A
+016F 23               60             RL A
+0170 23               61             RL A
+0171 23               62             RL A
+                      63             
+0172 75902F           64             MOV P1, #2FH
+0175 3130             65             CALL DELAY_8s
+0177 C295             66             CLR P1.5
+0179 4590             67             ORL A, P1
+017B F550             68             MOV 50H, A
+                      69             
+                      70             
+017D 75903F           71             MOV P1, #3FH
+0180 3130             72             CALL DELAY_8s
+0182 C294             73             CLR P1.4
+0184 C295             74             CLR P1.5
+0186 E590             75             MOV A, P1
+0188 23               76             RL A
+0189 23               77             RL A
+018A 23               78             RL A
+018B 23               79             RL A
+                      80             
+018C 75904F           81             MOV P1, #4FH
+018F 3130             82             CALL DELAY_8s
+0191 C296             83             CLR P1.6
+0193 4590             84             ORL A, P1
+0195 F551             85             MOV 51H, A
+                      86             
+                      87             
+0197 75905F           88             MOV P1, #5FH
+019A 3130             89             CALL DELAY_8s
+019C C296             90             CLR P1.6
+019E C294             91             CLR P1.4
+01A0 E590             92             MOV A, P1
+01A2 23               93             RL A
+01A3 23               94             RL A
+01A4 23               95             RL A
+01A5 23               96             RL A
+                      97             
+01A6 75906F           98             MOV P1, #6FH
+01A9 3130             99             CALL DELAY_8s
+01AB C296            100             CLR P1.6
+01AD C295            101             CLR P1.5
+01AF 4590            102             ORL A, P1
+01B1 F552            103             MOV 52H, A
+                     104             
+                     105             
+01B3 75907F          106             MOV P1, #7FH
+01B6 3130            107             CALL DELAY_8s
+01B8 C296            108             CLR P1.6
+01BA C295            109             CLR P1.5
+01BC C294            110             CLR P1.4
+01BE E590            111             MOV A, P1
+01C0 23              112             RL A
+01C1 23              113             RL A
+01C2 23              114             RL A
+01C3 23              115             RL A
+                     116             
+01C4 75908F          117             MOV P1, #8FH
+01C7 3130            118             CALL DELAY_8s
+01C9 C297            119             CLR P1.7
+01CB 4590            120             ORL A, P1
+01CD F553            121             MOV 53H, A
+01CF 22              122     RET
+                     123     
+A51 MACRO ASSEMBLER  ADC                                                                  02/04/2025 15:07:53 PAGE     3
+
+01D0                 124     QUANT_ENC:
+01D0 7950            125             MOV R1, #50H
+01D2                 126     QUANT_ENC_CHECK:
+01D2 C3              127             CLR C
+01D3 E7              128             MOV A, @R1
+01D4 9440            129             SUBB A, #40H
+01D6 400E            130             JC LESS_THAN_64
+                     131             
+01D8 C3              132             CLR C
+01D9 E7              133             MOV A, @R1
+01DA 9480            134             SUBB A, #80H
+01DC 400F            135             JC BETWEEN_64_128
+                     136     
+01DE C3              137             CLR C
+01DF E7              138             MOV A, @R1
+01E0 94C0            139             SUBB A, #0C0H
+01E2 4010            140             JC BETWEEN_128_192
+                     141     
+01E4 8015            142             JMP MORE_THAN_192
+                     143     
+01E6                 144     LESS_THAN_64:
+01E6 7710            145             MOV @R1, #10H
+01E8 09              146             INC R1
+01E9 B954E6          147             CJNE R1, #54H, QUANT_ENC_CHECK
+01EC 22              148             RET
+                     149             
+01ED                 150     BETWEEN_64_128:
+01ED 7720            151             MOV @R1, #20H
+01EF 09              152             INC R1
+01F0 B954DF          153             CJNE R1, #54H, QUANT_ENC_CHECK
+01F3 22              154             RET
+                     155             
+01F4                 156     BETWEEN_128_192:
+01F4 7740            157             MOV @R1, #40H
+01F6 09              158             INC R1
+01F7 B954D8          159             CJNE R1, #54H, QUANT_ENC_CHECK
+01FA 22              160             RET
+                     161             
+01FB                 162     MORE_THAN_192:
+01FB 7780            163             MOV @R1, #80H
+01FD 09              164             INC R1
+01FE B954D1          165             CJNE R1, #54H, QUANT_ENC_CHECK
+0201 22              166             RET
+                     167     
+0202                 168     LED_DISP:
+0202 7950            169             MOV R1, #50H
+                     170             
+0204                 171     LED_LOOP:
+0204 8790            172             MOV P1, @R1
+0206 313B            173             CALL DELAY_4s
+0208 09              174             INC R1
+0209 B954F8          175             CJNE R1,#54H, LED_LOOP
+020C 80F4            176             JMP LED_DISP
+                     177     
+020E 22              178     RET
+                     179     END
+A51 MACRO ASSEMBLER  ADC                                                                  02/04/2025 15:07:53 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+BETWEEN_128_192. .  C ADDR   01F4H   A   
+BETWEEN_64_128 . .  C ADDR   01EDH   A   
+DELAY_10MS . . . .  C ADDR   0151H   A   
+DELAY_1S . . . . .  C ADDR   0146H   A   
+DELAY_250US. . . .  C ADDR   015CH   A   
+DELAY_4S . . . . .  C ADDR   013BH   A   
+DELAY_8S . . . . .  C ADDR   0130H   A   
+H1 . . . . . . . .  C ADDR   0160H   A   
+H2 . . . . . . . .  C ADDR   0155H   A   
+H3 . . . . . . . .  C ADDR   014AH   A   
+H4 . . . . . . . .  C ADDR   013FH   A   
+H5 . . . . . . . .  C ADDR   0134H   A   
+HERE . . . . . . .  C ADDR   0106H   A   
+LED_DISP . . . . .  C ADDR   0202H   A   
+LED_LOOP . . . . .  C ADDR   0204H   A   
+LESS_THAN_64 . . .  C ADDR   01E6H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+MORE_THAN_192. . .  C ADDR   01FBH   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+QUANT_ENC. . . . .  C ADDR   01D0H   A   
+QUANT_ENC_CHECK. .  C ADDR   01D2H   A   
+TAKE_INP . . . . .  C ADDR   0165H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\SaReGaMaPaDhaNiSa.obj" 
+TO ".\Objects\Keypad_to_Musical_Note_Mapping" 
+PRINT(".\Listings\Keypad_to_Musical_Note_Mapping.m51") RAMSIZE(256) 

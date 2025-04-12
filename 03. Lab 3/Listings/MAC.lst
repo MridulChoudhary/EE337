@@ -1,0 +1,70 @@
+A51 MACRO ASSEMBLER  MAC                                                                  01/28/2025 14:54:45 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\MAC.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE MAC.asm SET(SMALL) DEBUG PRINT(.\Listings\MAC.lst) OBJECT(.\Objects\MAC
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H
+0000 020100            2     LJMP MAIN
+0100                   3     ORG 100H
+0100                   4     MAIN:
+0100 3130              5     CALL MAC
+0102 80FE              6     HERE: SJMP HERE
+0130                   7     ORG 130H
+                       8     
+                       9     
+0130                  10     MAC:
+0130 755000           11             MOV 50H, #00H
+0133 755100           12             MOV 51H, #00H
+0136 755200           13             MOV 52H, #00H
+0139 E570             14             MOV A, 70H
+013B 8573F0           15             MOV B, 73H
+013E A4               16             MUL AB
+013F 3152             17             CALL ADD16
+0141 E571             18             MOV A, 71H
+0143 8574F0           19             MOV B, 74H
+0146 A4               20             MUL AB
+0147 3152             21             CALL ADD16
+0149 E572             22             MOV A, 72H
+014B 8575F0           23             MOV B, 75H
+014E A4               24             MUL AB
+014F 3152             25             CALL ADD16
+                      26             
+0151 22               27     RET
+0152                  28     ADD16:
+                      29     
+0152 2552             30             ADD A, 52H
+0154 F552             31             MOV 52H, A
+0156 E5F0             32             MOV A, B
+0158 3551             33             ADDC A, 51H
+015A F551             34             MOV 51H, A
+015C E9               35             MOV A, R1
+015D 39               36             ADDC A, R1
+015E 2550             37             ADD A, 50H
+0160 F550             38             MOV 50H, A
+                      39     
+0162 22               40     RET
+                      41     END
+A51 MACRO ASSEMBLER  MAC                                                                  01/28/2025 14:54:45 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ADD16. . . . . . .  C ADDR   0152H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+HERE . . . . . . .  C ADDR   0102H   A   
+MAC. . . . . . . .  C ADDR   0130H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

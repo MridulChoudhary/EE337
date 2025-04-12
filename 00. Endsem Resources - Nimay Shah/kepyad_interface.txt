@@ -1,0 +1,242 @@
+#include <at89c5131.h>
+#include "lcd.h"
+
+unsigned char x,y;
+unsigned int row, column, key;
+sbit NOTE = P0^7;
+int high, low;
+
+
+void timer0_isr() interrupt 1
+{
+	TF0 = 0;
+	NOTE = ~NOTE;
+	switch(key)
+	{
+		case 1:
+			TH0 = 0xEF;
+			TL0 = 0xB9;
+			TR0 = 1;
+			break;
+		
+		case 2:
+			TH0 = 0xF1;
+			TL0 = 0x88;
+			TR0 = 1;
+			break;
+		
+		case 3:
+			TH0 = 0xF2;
+			TL0 = 0xFB;
+			TR0 = 1;
+			break;
+		
+		case 4:
+			TH0 = 0xF3;
+			TL0 = 0xCB;
+			TR0 = 1;
+			break;
+		
+		case 5:
+			TH0 = 0xF5;
+			TL0 = 0x26;
+			TR0 = 1;
+			break;
+		
+		case 6:
+			TH0 = 0xF6;
+			TL0 = 0x3C;
+			TR0 = 1;
+			break;
+		
+		case 7:
+			TH0 = 0xF7;
+			TL0 = 0x52;
+			TR0 = 1;
+			break;
+		
+		case 8:
+			TH0 = 0xF7;
+			TL0 = 0xDD;
+			TR0 = 1;
+			break;
+		
+		case 9:
+			TR0 = 0;
+			break;
+		
+		default:
+			TR0 = 0;
+	}
+}
+
+
+void playNote()
+{
+	switch(key)
+	{
+		case 1:
+			TH0 = 0xEF;
+			TL0 = 0xB9;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("     Sa(Low)    ");
+			break;
+		
+		case 2:
+			TH0 = 0xF1;
+			TL0 = 0x89;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("       Re       ");
+			break;
+		
+		case 3:
+			TH0 = 0xF2;
+			TL0 = 0xFB;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("       Ga       ");
+			break;
+		
+		case 4:
+			TH0 = 0xF3;
+			TL0 = 0xCB;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("       Ma       ");
+			break;
+		
+		case 5:
+			TH0 = 0xF5;
+			TL0 = 0x76;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("       Pa       ");
+			break;
+		
+		case 6:
+			TH0 = 0xF6;
+			TL0 = 0x8C;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("      Dha       ");
+			break;
+		
+		case 7:
+			TH0 = 0xF7;
+			TL0 = 0xA2;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("       Ni       ");
+			break;
+		
+		case 8:
+			TH0 = 0xF8;
+			TL0 = 0x2D;
+			TR0 = 1;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("    Sa(High)    ");
+			break;
+		
+		case 9:
+			TR0 = 0;
+			lcd_cmd(0x80);
+			msdelay(4);
+			lcd_write_string("    Silence     ");
+			break;
+		
+		default:
+			TR0 = 0;
+			lcd_cmd(0x80);
+			msdelay(4);	
+			lcd_write_string("  Invalid Note  ");
+	}
+}
+
+
+void checkKey()
+{
+	y = 0xF7;
+	row=0;
+	column=1;
+	key = 0;
+	
+	P3 = 0x0F;
+	
+	// Checking previous key release
+	keyRelease:
+	x = P3;
+	x = x & 0x0F;
+	if(x != 0x0F)
+		goto keyRelease;
+		
+	// Checking if a key has been pressed
+	checkKeyPress:
+	x = P3;
+	x = x & 0x0F;
+	if(x == 0x0F)
+		goto checkKeyPress;
+	
+	msdelay(20);
+	
+	// Confirming if the key has been pressed
+	x = P3;
+	x = x & 0x0F;
+	if (x == 0x0F)
+		goto keyRelease;
+	else 
+		goto readKey;
+	
+	// Reading the key that was pressed
+	readKey:
+	y = y<<1 | 0x0F;
+	P3 = y;
+	x = P3;
+	x = x & 0x0F;
+	// Check if key pressed in current row
+	if (x == 0x0F)
+	{
+		row = row+1;
+		goto readKey;
+	}
+	else if (x == 0x0E)
+		column = 4;
+	else if (x == 0x0D)
+		column = 3;
+	else if (x == 0x0B)
+		column = 2;
+	else if (x == 0x07)
+		column = 1;
+	
+	key = (4 * row) + column;
+	playNote();
+}
+	
+	
+
+
+void main()
+{
+	EA = 1;
+	ET0 = 1;
+	TF0 = 0;
+	TMOD = 0x01;
+	P3 = 0x0F;
+	lcd_init();
+	lcd_cmd(0x80); // Move command to the first line
+	
+	//lcd_write_string("Hello World");
+	//msdelay(2000);
+	
+	while(1)
+		checkKey();
+}
