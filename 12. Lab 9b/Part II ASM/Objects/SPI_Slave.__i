@@ -1,0 +1,1 @@
+"SPI_Slave.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\SPI_Slave.lst) TABS (2) OBJECT(.\Objects\SPI_Slave.obj)

@@ -1,0 +1,40 @@
+A51 MACRO ASSEMBLER  ADDITION                                                             04/14/2025 02:22:36 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\ADDITION.obj
+ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE ADDITION.asm SET(SMALL) DEBUG PRINT(.\Listings\ADDITION.lst) OBJECT(.\O
+                      bjects\ADDITION.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     NAME ADDITION
+                       2             
+----                   3     CSEG AT 100h        ; Set code segment starting at 0x100
+                       4     
+                       5     PUBLIC add_numbers     ; Make this function available to C
+                       6     
+0100                   7     add_numbers:
+                       8         ; Access operands from data memory
+0100 C3                9             CLR C
+0101 E530             10         MOV A, 30h         ; A = *num1 (stored at 0x30)
+0103 2531             11         ADD A, 31h         ; A = A + *num2 (stored at 0x31)
+0105 F532             12         MOV 32h, A         ; Store result at *result (0x32)
+0107 22               13         RET
+                      14     END
+A51 MACRO ASSEMBLER  ADDITION                                                             04/14/2025 02:22:36 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ADDITION . . . . .  N NUMB   -----       
+ADD_NUMBERS. . . .  C ADDR   0100H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

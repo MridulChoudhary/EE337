@@ -1,0 +1,1 @@
+"SPI_Master.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\SPI_Master.lst) TABS (2) OBJECT(.\Objects\SPI_Master.obj)

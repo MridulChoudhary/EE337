@@ -1,0 +1,146 @@
+C51 COMPILER V9.60.7.0   SPI_MASTER                                                        04/14/2025 22:36:00 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPI_MASTER
+OBJECT MODULE PLACED IN .\Objects\SPI_Master.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE SPI_Master.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\SPI_Master.lst) TABS(2) OBJECT(.\Objects\SPI_Master.obj)
+
+line level    source
+
+   1          #include <at89c5131.h>
+   2          #include "spi.h"
+   3          #include "serial.h"
+   4          
+   5          
+   6          sbit SS = P1^4;
+   7          unsigned char ch = 0;
+   8          int a1, a2;
+   9          int int1=0, int2=0;
+  10          int int1_copy=0, int2_copy=0;
+  11          int int1_copy2=0, int2_copy2=0;
+  12          int digits = 0;
+  13          int result = 0;
+  14          
+  15          void msdelay(unsigned int time)
+  16          {
+  17   1        int i,j;
+  18   1        for(i = 0; i < time; i++)
+  19   1        {
+  20   2          for(j = 0; j < 382; j++);
+  21   2        }
+  22   1      }
+  23          
+  24          void main(void) {
+  25   1        
+  26   1        spi_master_init();          
+  27   1        uart_init();
+  28   1      
+  29   1        transmit_string("\r\nEnter Input-1: ");
+  30   1        while(1){
+  31   2          ch = receive_char();
+  32   2          if (ch == 46) break;
+  33   2          int1 = int1 * 10;
+  34   2          int1 += (ch - 48);
+  35   2        }
+  36   1      //  int1_copy = int1;
+  37   1      //  int1_copy2 = int1;
+  38   1        transmit_string("\r\nEnter Input-2: ");
+  39   1        while(1){
+  40   2          ch = receive_char();
+  41   2          if (ch == 46) break;
+  42   2          int2 = int2 * 10;
+  43   2          int2 += (ch - 48);
+  44   2        }
+  45   1        
+  46   1        transmit_string("\r\nEnter a1: ");
+  47   1        while(1){
+  48   2          ch = receive_char();
+  49   2          if (ch == 46) break;
+  50   2          a1 = a1 * 10;
+  51   2          a1 += (ch - 48);
+  52   2        }
+  53   1        
+  54   1        transmit_string("\r\nEnter a2: ");
+C51 COMPILER V9.60.7.0   SPI_MASTER                                                        04/14/2025 22:36:00 PAGE 2   
+
+  55   1        while(1){
+  56   2          ch = receive_char();
+  57   2          if (ch == 46) break;
+  58   2          a2 = a2 * 10;
+  59   2          a2 += (ch - 48);
+  60   2        }
+  61   1        
+  62   1        //  int2_copy = int2;
+  63   1      //  int2_copy2 = int2;
+  64   1      //  while(int1_copy2 > 0){
+  65   1      //    digits++;
+  66   1      //    int1_copy2 /= 10;
+  67   1      //  }
+  68   1          // Send primes to slave
+  69   1      //    SS = 0;                  // Select slave
+  70   1      //    spi_trx(digits);         // Send data
+  71   1      //    SS = 1; 
+  72   1          
+  73   1      //  while(int1_copy > 0){
+  74   1          SS = 0;                  // Select slave
+  75   1          spi_trx(int1);         // Send data
+  76   1          SS = 1;
+  77   1      //    int1_copy /= 10;
+  78   1      //  }
+  79   1      
+  80   1          msdelay(500);
+  81   1        
+  82   1      //  digits = 0;
+  83   1      //  while(int2_copy2 > 0){
+  84   1      //    digits++;
+  85   1      //    int2_copy2 /= 10;
+  86   1      //  }
+  87   1      
+  88   1      //    SS = 0;                  // Select slave
+  89   1      //    spi_trx(digits);         // Send data
+  90   1      //    SS = 1; 
+  91   1      
+  92   1      //  while(int2_copy > 0){
+  93   1          SS = 0;                  // Select slave
+  94   1          spi_trx(int2);         // Send data
+  95   1          SS = 1;
+  96   1      //    int2_copy /= 10;
+  97   1      //  }
+  98   1          msdelay(500);
+  99   1      
+ 100   1          SS = 0;                  // Select slave
+ 101   1          spi_trx(a1);         // Send data
+ 102   1          SS = 1;
+ 103   1          msdelay(500);
+ 104   1        
+ 105   1          SS = 0;                  // Select slave
+ 106   1          spi_trx(a2);         // Send data
+ 107   1          SS = 1;
+ 108   1          msdelay(500);
+ 109   1          
+ 110   1          result = spi_trx(0);
+ 111   1          if (result == 1) {
+ 112   2              transmit_string("\r\nPRIME\r\n");
+ 113   2          } else if(result == 2){
+ 114   2              transmit_string("\r\nNOT PRIME\r\n");
+ 115   2          }
+ 116   1          
+C51 COMPILER V9.60.7.0   SPI_MASTER                                                        04/14/2025 22:36:00 PAGE 3   
+
+ 117   1        while(1);
+ 118   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    608    ----
+   CONSTANT SIZE    =     86    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

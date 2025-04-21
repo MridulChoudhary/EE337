@@ -1,0 +1,399 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    04/14/2025  11:54:28  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\SPI_Master.obj, .\Objects\STARTUP.obj TO .\Objects\UART_Master PRINT (.\Listings\U
+>> ART_Master.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\SPI_Master.obj (SPI_MASTER)
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?ULSHR)
+
+
+LINK MAP OF MODULE:  .\Objects\UART_Master (SPI_MASTER)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0012H     UNIT         ?DT?SPI_MASTER
+            DATA    001AH     0004H     UNIT         _DATA_GROUP_
+                    001EH     0002H                  *** GAP ***
+            BIT     0020H.0   0000H.3   UNIT         ?BI?SPI_MASTER
+                    0020H.3   0000H.5                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0020H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     0025H                  *** GAP ***
+            CODE    004BH     0003H     ABSOLUTE     
+                    004EH     07B2H                  *** GAP ***
+            CODE    0800H     00BFH     UNIT         ?PR?MAIN?SPI_MASTER
+            CODE    08BFH     008CH     UNIT         ?C_C51STARTUP
+            CODE    094BH     0062H     UNIT         ?PR?_SPI_TRX?SPI_MASTER
+            CODE    09ADH     003EH     UNIT         ?C?LIB_CODE
+            CODE    09EBH     003CH     UNIT         ?CO?SPI_MASTER
+            CODE    0A27H     002AH     UNIT         ?C_INITSEG
+            CODE    0A51H     0026H     UNIT         ?PR?_MSDELAY?SPI_MASTER
+            CODE    0A77H     0025H     UNIT         ?PR?_TRANSMIT_STRING?SPI_MASTER
+            CODE    0A9CH     0016H     UNIT         ?PR?SPI_INTERRUPT?SPI_MASTER
+            CODE    0AB2H     0010H     UNIT         ?PR?UART_INIT?SPI_MASTER
+            CODE    0AC2H     0010H     UNIT         ?PR?SERIAL_ISR?SPI_MASTER
+            CODE    0AD2H     000CH     UNIT         ?PR?SPI_MASTER_INIT?SPI_MASTER
+            CODE    0ADEH     000CH     UNIT         ?PR?SPI_SLAVE_INIT?SPI_MASTER
+            CODE    0AEAH     000CH     UNIT         ?PR?SPI_INIT?SPI_MASTER
+            CODE    0AF6H     000AH     UNIT         ?PR?RECEIVE_CHAR?SPI_MASTER
+            CODE    0B00H     0008H     UNIT         ?PR?_TRANSMIT_CHAR?SPI_MASTER
+
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 2
+
+
+OVERLAY MAP OF MODULE:   .\Objects\UART_Master (SPI_MASTER)
+
+
+SEGMENT                                   DATA_GROUP 
+  +--> CALLED SEGMENT                   START    LENGTH
+-------------------------------------------------------
+?C_C51STARTUP                           -----    -----
+  +--> ?PR?MAIN?SPI_MASTER
+  +--> ?C_INITSEG
+
+?PR?MAIN?SPI_MASTER                     -----    -----
+  +--> ?PR?SPI_MASTER_INIT?SPI_MASTER
+  +--> ?PR?UART_INIT?SPI_MASTER
+  +--> ?CO?SPI_MASTER
+  +--> ?PR?_TRANSMIT_STRING?SPI_MASTER
+  +--> ?PR?RECEIVE_CHAR?SPI_MASTER
+  +--> ?PR?_SPI_TRX?SPI_MASTER
+  +--> ?PR?_MSDELAY?SPI_MASTER
+
+?PR?_TRANSMIT_STRING?SPI_MASTER         001AH    0003H
+  +--> ?PR?_TRANSMIT_CHAR?SPI_MASTER
+
+?PR?_SPI_TRX?SPI_MASTER                 001AH    0004H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\UART_Master (SPI_MASTER)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        SPI_MASTER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        int2
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C3H         PUBLIC        SPCON
+  B:00A8H.7       PUBLIC        EA
+  D:000AH         PUBLIC        digits
+  D:00C4H         PUBLIC        SPSTA
+  D:00A8H         PUBLIC        IEN0
+  C:0951H         PUBLIC        _spi_trx
+  D:00B1H         PUBLIC        IEN1
+  D:00B8H         PUBLIC        IPL0
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.0       PUBLIC        RI
+  D:000CH         PUBLIC        int1_copy
+  B:0020H.0       PUBLIC        transmit_completed
+  D:000EH         PUBLIC        int2_copy
+  B:0098H.1       PUBLIC        TI
+  C:0A9CH         PUBLIC        spi_interrupt
+  D:0010H         PUBLIC        result
+  D:00D8H         PUBLIC        CCON
+  B:0090H.4       PUBLIC        SS
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 3
+
+
+  C:0800H         PUBLIC        main
+  B:0020H.1       PUBLIC        rx_complete
+  B:0020H.2       PUBLIC        tx_complete
+  D:0099H         PUBLIC        SBUF
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:0012H         PUBLIC        ch
+  D:008DH         PUBLIC        TH1
+  D:0013H         PUBLIC        int1_copy2
+  D:0015H         PUBLIC        int2_copy2
+  C:0AC2H         PUBLIC        serial_ISR
+  C:0AB2H         PUBLIC        uart_init
+  C:0AD2H         PUBLIC        spi_master_init
+  D:00F8H         PUBLIC        UEPINT
+  B:0088H.6       PUBLIC        TR1
+  C:0ADEH         PUBLIC        spi_slave_init
+  D:0017H         PUBLIC        temp_spi_data
+  C:0AEAH         PUBLIC        spi_init
+  D:00C8H         PUBLIC        T2CON
+  C:0AF6H         PUBLIC        receive_char
+  C:0A57H         PUBLIC        _msdelay
+  C:0A77H         PUBLIC        _transmit_string
+  C:0B00H         PUBLIC        _transmit_char
+  D:0018H         PUBLIC        int1
+  D:00C5H         PUBLIC        SPDAT
+  -------         PROC          SPI_MASTER_INIT
+  C:0AD2H         LINE#         36
+  C:0AD2H         LINE#         37
+  C:0AD2H         LINE#         38
+  C:0AD5H         LINE#         39
+  C:0AD8H         LINE#         40
+  C:0ADAH         LINE#         41
+  C:0ADDH         LINE#         42
+  -------         ENDPROC       SPI_MASTER_INIT
+  -------         PROC          SPI_SLAVE_INIT
+  C:0ADEH         LINE#         44
+  C:0ADEH         LINE#         45
+  C:0ADEH         LINE#         46
+  C:0AE1H         LINE#         47
+  C:0AE4H         LINE#         48
+  C:0AE6H         LINE#         49
+  C:0AE9H         LINE#         50
+  -------         ENDPROC       SPI_SLAVE_INIT
+  -------         PROC          SPI_INIT
+  C:0AEAH         LINE#         52
+  C:0AEAH         LINE#         53
+  C:0AEAH         LINE#         73
+  C:0AEDH         LINE#         74
+  C:0AF0H         LINE#         75
+  C:0AF2H         LINE#         76
+  C:0AF5H         LINE#         77
+  -------         ENDPROC       SPI_INIT
+  -------         PROC          L?0054
+  -------         ENDPROC       L?0054
+  -------         PROC          _SPI_TRX
+  D:001AH         SYMBOL        spi_data_tx
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 4
+
+
+  -------         DO            
+  D:0004H         SYMBOL        spi_data_rx
+  D:0001H         SYMBOL        spi_data_3
+  D:0003H         SYMBOL        spi_data_2
+  D:0005H         SYMBOL        spi_data_1
+  -------         ENDDO         
+  C:0951H         LINE#         85
+  C:0959H         LINE#         86
+  C:0959H         LINE#         92
+  C:095BH         LINE#         94
+  C:0963H         LINE#         96
+  C:0966H         LINE#         97
+  C:0968H         LINE#         100
+  C:096AH         LINE#         101
+  C:0979H         LINE#         103
+  C:097CH         LINE#         104
+  C:097EH         LINE#         107
+  C:0980H         LINE#         108
+  C:0985H         LINE#         110
+  C:0988H         LINE#         111
+  C:098AH         LINE#         113
+  C:09ACH         LINE#         115
+  C:09ACH         LINE#         116
+  -------         ENDPROC       _SPI_TRX
+  -------         PROC          SPI_INTERRUPT
+  C:0A9CH         LINE#         126
+  C:0AA0H         LINE#         129
+  C:0AA8H         LINE#         130
+  C:0AA8H         LINE#         131
+  C:0AA8H         LINE#         132
+  C:0AABH         LINE#         133
+  C:0AADH         LINE#         134
+  C:0AADH         LINE#         136
+  C:0AADH         LINE#         138
+  C:0AADH         LINE#         140
+  C:0AADH         LINE#         141
+  C:0AADH         LINE#         142
+  C:0AADH         LINE#         143
+  -------         ENDPROC       SPI_INTERRUPT
+  -------         PROC          UART_INIT
+  C:0AB2H         LINE#         17
+  C:0AB2H         LINE#         18
+  C:0AB2H         LINE#         19
+  C:0AB5H         LINE#         20
+  C:0AB8H         LINE#         21
+  C:0ABBH         LINE#         22
+  C:0ABDH         LINE#         23
+  C:0ABFH         LINE#         24
+  C:0AC1H         LINE#         25
+  -------         ENDPROC       UART_INIT
+  -------         PROC          _TRANSMIT_CHAR
+  D:0007H         SYMBOL        ch
+  C:0B00H         LINE#         31
+  C:0B00H         LINE#         32
+  C:0B00H         LINE#         33
+  C:0B02H         LINE#         34
+  C:0B05H         LINE#         35
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 5
+
+
+  C:0B07H         LINE#         36
+  -------         ENDPROC       _TRANSMIT_CHAR
+  -------         PROC          _TRANSMIT_STRING
+  D:001AH         SYMBOL        s
+  C:0A77H         LINE#         42
+  C:0A7DH         LINE#         43
+  C:0A7DH         LINE#         44
+  C:0A88H         LINE#         45
+  C:0A88H         LINE#         46
+  C:0A99H         LINE#         47
+  C:0A9BH         LINE#         48
+  -------         ENDPROC       _TRANSMIT_STRING
+  -------         PROC          RECEIVE_CHAR
+  -------         DO            
+  D:0007H         SYMBOL        ch
+  -------         ENDDO         
+  C:0AF6H         LINE#         55
+  C:0AF6H         LINE#         56
+  C:0AF6H         LINE#         57
+  C:0AF8H         LINE#         58
+  C:0AFBH         LINE#         59
+  C:0AFDH         LINE#         60
+  C:0AFFH         LINE#         61
+  C:0AFFH         LINE#         62
+  -------         ENDPROC       RECEIVE_CHAR
+  -------         PROC          SERIAL_ISR
+  C:0AC2H         LINE#         72
+  C:0AC2H         LINE#         74
+  C:0AC5H         LINE#         75
+  C:0AC5H         LINE#         76
+  C:0AC7H         LINE#         77
+  C:0AC9H         LINE#         78
+  C:0ACAH         LINE#         79
+  C:0ACDH         LINE#         80
+  C:0ACDH         LINE#         81
+  C:0ACFH         LINE#         82
+  C:0AD1H         LINE#         83
+  C:0AD1H         LINE#         84
+  -------         ENDPROC       SERIAL_ISR
+  -------         PROC          L?0055
+  -------         ENDPROC       L?0055
+  -------         PROC          _MSDELAY
+  D:0006H         SYMBOL        time
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0A57H         LINE#         14
+  C:0A57H         LINE#         15
+  C:0A57H         LINE#         17
+  C:0A61H         LINE#         18
+  C:0A61H         LINE#         19
+  C:0A6FH         LINE#         20
+  C:0A76H         LINE#         21
+  -------         ENDPROC       _MSDELAY
+  -------         PROC          MAIN
+  C:0800H         LINE#         23
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 6
+
+
+  C:0800H         LINE#         25
+  C:0803H         LINE#         26
+  C:0806H         LINE#         28
+  C:080FH         LINE#         29
+  C:080FH         LINE#         30
+  C:0814H         LINE#         31
+  C:081AH         LINE#         32
+  C:0829H         LINE#         33
+  C:083CH         LINE#         34
+  C:083EH         LINE#         37
+  C:0847H         LINE#         38
+  C:0847H         LINE#         39
+  C:084CH         LINE#         40
+  C:0852H         LINE#         41
+  C:0861H         LINE#         42
+  C:0874H         LINE#         43
+  C:0876H         LINE#         56
+  C:0878H         LINE#         57
+  C:087FH         LINE#         58
+  C:087FH         LINE#         62
+  C:0882H         LINE#         75
+  C:0884H         LINE#         76
+  C:088BH         LINE#         77
+  C:088BH         LINE#         80
+  C:088EH         LINE#         82
+  C:089CH         LINE#         83
+  C:08A4H         LINE#         84
+  C:08AAH         LINE#         85
+  C:08B4H         LINE#         86
+  C:08BDH         LINE#         87
+  C:08BDH         LINE#         89
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        SPI_MASTER
+
+  -------         MODULE        ?C_STARTUP
+  C:08BFH         SEGMENT       ?C_C51STARTUP
+  I:0021H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:08C2H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:08BFH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/14/2025  11:54:28  PAGE 7
+
+
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:08BFH         LINE#         133
+  C:08C1H         LINE#         134
+  C:08C2H         LINE#         135
+  C:08C3H         LINE#         136
+  C:08C5H         LINE#         185
+  C:08C8H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        ?C?CLDPTR
+  C:09ADH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?IMUL
+  C:09C6H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?ULSHR
+  C:09D8H         PUBLIC        ?C?ULSHR
+  -------         ENDMOD        ?C?ULSHR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SPI_SLAVE_INIT?SPI_MASTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SPI_INIT?SPI_MASTER
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0252H BYTE (29%) *
+******************************************************************************
+
+Program Size: data=31.3 xdata=0 code=785
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)

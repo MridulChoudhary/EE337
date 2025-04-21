@@ -1,0 +1,105 @@
+C51 COMPILER V9.60.7.0   SPI_SLAVE                                                         04/14/2025 12:04:08 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPI_SLAVE
+OBJECT MODULE PLACED IN .\Objects\SPI_Slave.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE SPI_Slave.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\SPI_Slave.lst) TABS(2) OBJECT(.\Objects\SPI_Slave.obj)
+
+line level    source
+
+   1          #include "spi.h"
+   2          #include <at89c5131.h>
+   3          #include "lcd.h"
+   4          
+   5          sbit SS = P1^4;
+   6          
+   7          extern void add_numbers(void);
+   8          
+   9          //data unsigned int num1 = (unsigned int )0x30;
+  10          //data unsigned int num2 = (unsigned int )0x31;
+  11          //data unsigned int sum = (unsigned int )0x32;
+  12          
+  13          xdata unsigned int num1, num2, sum;
+  14          //int sum;
+  15          int result;
+  16          int digits = 0;
+  17          char adc_ip_data_ascii[6] = {'0','0','0','0','0','\0'};
+  18          int i=0;
+  19          int p=1;
+  20          
+  21          unsigned int is_prime(unsigned int n) {
+  22   1          unsigned int i;
+  23   1          if (n < 2) return 2;
+  24   1          for (i = 2; i * i <= n; ++i) {
+  25   2              if (n % i == 0) return 2;
+  26   2          }
+  27   1          return 1;
+  28   1      }
+  29          
+  30          void main(void) { 
+  31   1      
+  32   1        spi_slave_init();
+  33   1        lcd_init();
+  34   1        num1=0;
+  35   1        num2=0;
+  36   1        sum=0;
+  37   1        
+  38   1        lcd_cmd(0x01);
+  39   1        lcd_cmd(0x80);
+  40   1        lcd_write_string("Slave Initialize");
+  41   1      
+  42   1      /*  digits = spi_trx(0x00);
+  43   1        p = 1;
+  44   1        for(i=0; i<digits; i++){
+  45   1          num1 += (p * (spi_trx(0x00)));
+  46   1          p *= 10;
+  47   1        }
+  48   1      */
+  49   1        num1 = spi_trx(0x00);
+  50   1        int_to_string(num1, adc_ip_data_ascii);
+  51   1        lcd_cmd(0x01);
+  52   1        lcd_cmd(0x80);
+  53   1        lcd_write_string(adc_ip_data_ascii);
+  54   1        
+C51 COMPILER V9.60.7.0   SPI_SLAVE                                                         04/14/2025 12:04:08 PAGE 2   
+
+  55   1      /*  digits = spi_trx(0x00);
+  56   1        p = 1;
+  57   1        for(i=0; i<digits; i++){
+  58   1          num2 += (p * (spi_trx(0x00)));
+  59   1          p *= 10;
+  60   1        }
+  61   1      */
+  62   1        num2 = spi_trx(0x00);
+  63   1        lcd_write_char('+');
+  64   1        int_to_string(num2, adc_ip_data_ascii);
+  65   1        lcd_write_string(adc_ip_data_ascii);
+  66   1        
+  67   1      //  sum = num1 + num2;
+  68   1         add_numbers();           // Call assembly function to compute sum
+  69   1        result = is_prime(sum);
+  70   1        lcd_cmd(0xC0);
+  71   1        lcd_write_string("Sum is ");
+  72   1        int_to_string(sum, adc_ip_data_ascii);
+  73   1        lcd_write_string(adc_ip_data_ascii);
+  74   1      
+  75   1        spi_trx(result);
+  76   1        
+  77   1        while (1);  // Keep display on
+  78   1      
+  79   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    715    ----
+   CONSTANT SIZE    =     25    ----
+   XDATA SIZE       =      6    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

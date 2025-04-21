@@ -1,0 +1,4 @@
+".\Objects\SPI_Master.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\UART_Master" 
+PRINT(".\Listings\UART_Master.m51") RAMSIZE(256) 

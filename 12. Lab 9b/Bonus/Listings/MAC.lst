@@ -1,0 +1,68 @@
+A51 MACRO ASSEMBLER  MAC                                                                  04/14/2025 23:42:39 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\MAC.obj
+ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE MAC.asm SET(SMALL) DEBUG PRINT(.\Listings\MAC.lst) OBJECT(.\Objects\MAC
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1                 NAME MAC_OPERATION
+                       2                 PUBLIC mac_operation
+                       3                 EXTRN XDATA (num1, num2, a1, a2, sum)
+                       4     
+----                   5                 CSEG AT 0100H
+                       6     
+0100                   7     mac_operation:
+                       8     
+                       9                 ; Load num1 and a1
+0100 900000   F       10                 MOV     DPTR, #num1
+0103 E0               11                 MOVX    A, @DPTR       ; A = num1
+                      12     
+0104 900000   F       13                 MOV     DPTR, #a1
+0107 E0               14                 MOVX    A, @DPTR       ; B = a1
+0108 F5F0             15                             MOV B, A
+010A A4               16                 MUL     AB             ; A * B ? A (low), B (high)
+010B F8               17                 MOV     R0, A          ; Store result of num1*a1 in R0
+                      18                 ; We ignore B (high byte) to keep it 8-bit only
+                      19     
+                      20                 ; Load num2 and a2
+010C 900000   F       21                 MOV     DPTR, #num2
+010F E0               22                 MOVX    A, @DPTR
+                      23     
+0110 900000   F       24                 MOV     DPTR, #a2
+0113 E0               25                 MOVX    A, @DPTR
+0114 F5F0             26                             MOV B, A
+0116 A4               27                 MUL     AB             ; A * B ? A (low), B (high)
+0117 28               28                 ADD     A, R0          ; Add previous result
+                      29                 ; Again ignoring B for 8-bit only
+                      30     
+                      31                 ; Store final result in sum
+0118 900000   F       32                 MOV     DPTR, #sum
+011B F0               33                 MOVX    @DPTR, A
+                      34     
+011C 22               35                 RET
+                      36     
+                      37                 END
+A51 MACRO ASSEMBLER  MAC                                                                  04/14/2025 23:42:39 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+A1 . . . . . . . .  X ADDR   -----       EXT
+A2 . . . . . . . .  X ADDR   -----       EXT
+B. . . . . . . . .  D ADDR   00F0H   A   
+MAC_OPERATION. . .  C ADDR   0100H   A   
+NUM1 . . . . . . .  X ADDR   -----       EXT
+NUM2 . . . . . . .  X ADDR   -----       EXT
+SUM. . . . . . . .  X ADDR   -----       EXT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

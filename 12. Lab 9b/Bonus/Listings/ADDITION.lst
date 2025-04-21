@@ -1,0 +1,68 @@
+A51 MACRO ASSEMBLER  ADDITION                                                             04/14/2025 12:06:22 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\ADDITION.obj
+ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE ADDITION.asm SET(SMALL) DEBUG PRINT(.\Listings\ADDITION.lst) OBJECT(.\O
+                      bjects\ADDITION.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1                 NAME    ADDITION
+                       2                 PUBLIC  add_numbers
+                       3                 EXTRN   XDATA (num1, num2, sum)
+                       4     
+----                   5                 CSEG AT 100H ; Code Segment
+                       6     
+0100                   7     add_numbers:
+                       8                 ; Load num1 into R2:R3
+0100 900000   F        9                 MOV     DPTR, #num1
+0103 E0               10                 MOVX    A, @DPTR
+0104 FA               11                 MOV     R2, A           ; Low byte
+0105 A3               12                 INC     DPTR
+0106 E0               13                 MOVX    A, @DPTR
+0107 FB               14                 MOV     R3, A           ; High byte
+                      15     
+                      16                 ; Load num2 into A and add to R2:R3
+0108 900000   F       17                 MOV     DPTR, #num2
+010B E0               18                 MOVX    A, @DPTR
+010C 2A               19                 ADD     A, R2           ; Add low bytes
+010D FC               20                 MOV     R4, A           ; Low byte of result
+010E 5001             21                 JNC     NO_CARRY
+0110 0B               22                 INC     R3              ; Carry -> increment high byte
+                      23     
+0111 A3               24     NO_CARRY:   INC     DPTR
+0112 E0               25                 MOVX    A, @DPTR
+0113 2B               26                 ADD     A, R3           ; Add high bytes
+0114 FD               27                 MOV     R5, A           ; High byte of result
+                      28     
+                      29                 ; Store result in sum
+0115 900000   F       30                 MOV     DPTR, #sum
+0118 EC               31                 MOV     A, R4
+0119 F0               32                 MOVX    @DPTR, A
+011A A3               33                 INC     DPTR
+011B ED               34                 MOV     A, R5
+011C F0               35                 MOVX    @DPTR, A
+                      36     
+011D 22               37                 RET
+                      38                 END
+A51 MACRO ASSEMBLER  ADDITION                                                             04/14/2025 12:06:22 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ADDITION . . . . .  N NUMB   -----       
+ADD_NUMBERS. . . .  C ADDR   0100H   A   
+NO_CARRY . . . . .  C ADDR   0111H   A   
+NUM1 . . . . . . .  X ADDR   -----       EXT
+NUM2 . . . . . . .  X ADDR   -----       EXT
+SUM. . . . . . . .  X ADDR   -----       EXT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
